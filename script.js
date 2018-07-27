@@ -2,6 +2,7 @@ $(document).ready(initializeApp);
 
 var student_array = [];
 var studentGradeAvg = null;
+var selectedStudentID = null;
 
 function initializeApp(){
       addClickHandlersToElements();
@@ -77,7 +78,7 @@ function renderStudentOnDom(studentObj){
             on: {
                   click: function() {
                     displayUpdateModal();
-                    let studentID = parseInt($(this).closest('tr').attr('id'));
+                    selectedStudentID = parseInt($(this).closest('tr').attr('id'));
                     let studentIndex = student_array.indexOf(studentObj);
                   }
             },
@@ -127,18 +128,26 @@ function updateStudentList(student){
 }
 
 function updateStudentServer() {
-    var studentID = parseInt($(this).closest('tr').attr('id'));
-    console.log(studentID);
-    /*var sendData = { id: studentID, action: 'update' };
+    var studentObj = {
+        name: $("#updateStudentName").val(),
+        course_name: $("#updateCourse").val(),
+        grade: parseInt($("#updateStudentGrade").val()),
+    }
+    var sendData = {name: studentObj.name, course_name:studentObj.course_name, grade:studentObj.grade, id: selectedStudentID, action: 'update' };
     var ajaxConfig = {
         data: sendData,
         dataType: 'json',
         method: 'GET',
         url: 'data.php',
+        success: function(response) {
+            handleGetDataClick();
+            $('#updateModal').modal('toggle');
+            $("#updateStudentName, #updateCourse, #updateStudentGrade").val("");
+      }
     }
     $.ajax(ajaxConfig);
     calculateGradeAverage(student_array);
-    renderGradeAverage(); */
+    renderGradeAverage(); 
 }
 
 function calculateGradeAverage(studentObj){
