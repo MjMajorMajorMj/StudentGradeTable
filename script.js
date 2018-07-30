@@ -80,6 +80,10 @@ function renderStudentOnDom(studentObj){
                     displayUpdateModal();
                     selectedStudentID = parseInt($(this).closest('tr').attr('id'));
                     let studentIndex = student_array.indexOf(studentObj);
+                    $('.update-modal-title').text("Updating " + student_array[studentIndex].name + "'s Entry");
+                    $('#updateStudentName').val(student_array[studentIndex].name);
+                    $("#updateCourse").val(student_array[studentIndex].course_name);
+                    $("#updateStudentGrade").val(student_array[studentIndex].grade);
                   }
             },
       });
@@ -156,6 +160,9 @@ function calculateGradeAverage(studentObj){
             var gradeNum = parseInt(studentObj[gradeCount].grade);
             studentGradeTotal+=gradeNum;
       }
+      if (studentObj.length === 0) {
+            studentObj.length = 1;
+      }
       studentGradeAvg = studentGradeTotal / studentObj.length;
 }
 
@@ -166,7 +173,6 @@ function renderGradeAverage(){
 
 function removeStudent(studentNum) {
       student_array.splice(studentNum, 1);
-
 }
 
 function handleGetDataClick() {
