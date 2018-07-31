@@ -29,29 +29,45 @@ function handleUpdateClick() {
 }
 
 function addStudent(){
-      if (isNaN($("#studentGrade").val())) {
-            displayModalError('Invalid Grade');
-            return;
-      }
-      var studentObj = {
+    let invalidTrigger = 0;
+    var studentObj = {
             name: $("#studentName").val(),
             course_name: $("#course").val(),
             grade: parseInt($("#studentGrade").val()),
-      }
-      student_array.push(studentObj);
-      clearAddStudentFormInputs();
-      var sendData = {name: studentObj.name, course_name:studentObj.course_name, grade:studentObj.grade, action:'insert'};
-      var ajaxConfig = {
-            data: sendData,
-            dataType: 'json',
-            method: 'GET',
-            url: 'data.php',
-            success: function(response) {
-                  student_array[student_array.length-1].id = response.insertID;
-                  updateStudentList(student_array[student_array.length-1]);
-            }
-      }
-      $.ajax(ajaxConfig);
+    }
+    
+    if (studentObj.name === "") {
+        $("#studentName").addClass("is-invalid");
+        invalidTrigger = 1;
+    }
+    if (studentObj.course_name === "") {
+        $("#course").addClass("is-invalid");
+        invalidTrigger = 1;
+    }
+    if (isNaN(studentObj.grade) || studentObj.grade>100 || studentObj.grade<0) {
+        $("#studentGrade").addClass("is-invalid");
+        invalidTrigger = 1;
+    }
+    if (invalidTrigger === 1) {
+        return;
+    } else {
+        $("#studentName, #course, #studentGrade").removeClass("is-invalid");
+    }
+    
+    student_array.push(studentObj);
+    clearAddStudentFormInputs();
+    var sendData = {name: studentObj.name, course_name:studentObj.course_name, grade:studentObj.grade, action:'insert'};
+    var ajaxConfig = {
+        data: sendData,
+        dataType: 'json',
+        method: 'GET',
+        url: 'data.php',
+        success: function(response) {
+            student_array[student_array.length-1].id = response.insertID;
+            updateStudentList(student_array[student_array.length-1]);
+        }
+    }
+    $.ajax(ajaxConfig);
 }
 
 function clearAddStudentFormInputs(){
@@ -132,10 +148,28 @@ function updateStudentList(student){
 }
 
 function updateStudentServer() {
+    let invalidTrigger = 0;
     var studentObj = {
         name: $("#updateStudentName").val(),
         course_name: $("#updateCourse").val(),
         grade: parseInt($("#updateStudentGrade").val()),
+    }
+    if (studentObj.name === "") {
+        $("#updateStudentName").addClass("is-invalid");
+        invalidTrigger = 1;
+    }
+    if (studentObj.course_name === "") {
+        $("#updateCourse").addClass("is-invalid");
+        invalidTrigger = 1;
+    }
+    if (isNaN(studentObj.grade) || studentObj.grade>100 || studentObj.grade<0) {
+        $("#updateStudentGrade").addClass("is-invalid");
+        invalidTrigger = 1;
+    }
+    if (invalidTrigger === 1) {
+        return;
+    } else {
+        $("#updateStudentName, #updateCourse, #updateStudentGrade").removeClass("is-invalid");
     }
     var sendData = {name: studentObj.name, course_name:studentObj.course_name, grade:studentObj.grade, id: selectedStudentID, action: 'update' };
     var ajaxConfig = {
