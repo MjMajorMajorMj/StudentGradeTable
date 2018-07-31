@@ -14,6 +14,9 @@ function addClickHandlersToElements(){
       $(".btnCancel").on('click', handleCancelClick);
       $('.btnGetData').on('click', handleGetDataClick);
       $('.btnUpdateToServer').on('click', handleUpdateClick);
+      $('.btnCancelUpdate').on('click', function() {
+            $("#updateStudentName, #updateCourse, #updateStudentGrade").removeClass("is-invalid");
+      });
 }
 
 function handleAddClicked(){
@@ -71,6 +74,7 @@ function addStudent(){
 }
 
 function clearAddStudentFormInputs(){
+      $("#studentName, #course, #studentGrade").removeClass("is-invalid");
       $("#studentName, #course, #studentGrade").val("");
 }
 
@@ -232,13 +236,6 @@ function getFromServer() {
             error: handleError
     }
     $.ajax(ajaxConfig);
-}
-
-function displayModalError(errorKey) {
-      if (errorKey === 'Invalid Grade') {
-            $('.modalError').text('Please input a number in the Grade field.');
-      };
-      $("#errorModal").modal();
 }
 
 function displayUpdateModal() {
