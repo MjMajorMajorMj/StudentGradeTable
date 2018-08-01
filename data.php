@@ -2,7 +2,7 @@
 
 define('fromData',true);
 
-if(empty($_GET['action'])){
+if(empty($_POST['action'])){
 	exit('no action specified');
 };
 require('mysql_connect.php');
@@ -12,7 +12,7 @@ $output = [
 	'errors'=>[]
 ];
 
-switch($_GET['action']){
+switch($_POST['action']){
 	case 'readAll':
 		include 'dataApi/read.php';
 		break;

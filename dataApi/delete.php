@@ -1,5 +1,5 @@
 <?php
-if(empty($_GET['id'])){
+if(empty($_POST['id'])){
 	$output['errors'][] = 'No ID given.';
 };
 //check if you have all the data you need from the client-side call.  
@@ -7,7 +7,7 @@ if(empty($_GET['id'])){
 
 //write a query that deletes the student by the given student ID  
 $result = null;
-$id = $_GET['id'];
+$id = $_POST['id'];
 $query = "DELETE FROM `student_data` WHERE `student_data`.`id` = $id";
 //send the query to the database, store the result of the query into $result
 $result = mysqli_query($conn, $query);

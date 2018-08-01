@@ -1,22 +1,22 @@
 <?php
-if(empty($_GET['id'])){
+if(empty($_POST['id'])){
 	$output['errors'][] = 'No ID given.';
 };
-if(empty($_GET['name'])){
+if(empty($_POST['name'])){
 	$output['errors'][] = 'No student name given.';
 };
-if(empty($_GET['course_name'])) {
+if(empty($_POST['course_name'])) {
 	$output['errors'][] = 'No course name given.';
 };
-if(empty($_GET['grade'])) {
+if(empty($_POST['grade'])) {
 	$output['errors'][] = 'No grade given.';
 };
 //check if you have all the data you need from the client-side call.  This should include the fields being changed and the ID of the student to be changed
 //if not, add an appropriate error to errors
-$id = $_GET['id'];
-$name = $_GET['name'];
-$grade = $_GET['grade'];
-$course_name = $_GET['course_name'];
+$id = $_POST['id'];
+$name = $_POST['name'];
+$grade = $_POST['grade'];
+$course_name = $_POST['course_name'];
 
 //write a query that updates the data at the given student ID.  
 $result = null;
