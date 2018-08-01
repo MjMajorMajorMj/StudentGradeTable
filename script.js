@@ -5,8 +5,8 @@ var studentGradeAvg = null;
 var selectedStudentID = null;
 
 function initializeApp(){
-      addClickHandlersToElements();
-      getFromServer();
+    addClickHandlersToElements();
+    getFromServer();
 }
 
 function addClickHandlersToElements(){
@@ -63,11 +63,15 @@ function addStudent(){
     var ajaxConfig = {
         data: sendData,
         dataType: 'json',
-        method: 'GET',
+        method: 'POST',
         url: 'data.php',
         success: function(response) {
-            student_array[student_array.length-1].id = response.insertID;
-            updateStudentList(student_array[student_array.length-1]);
+            if (response.success) {
+                student_array[student_array.length-1].id = response.insertID;
+                updateStudentList(student_array[student_array.length-1]);
+            } else {
+                displayErrorModal(response.errors[0]);
+            }
         }
     }
     $.ajax(ajaxConfig);
@@ -96,15 +100,16 @@ function renderStudentOnDom(studentObj){
             type: "button",
             class: "btn btn-info updateButton",
             on: {
-                  click: function() {
-                    displayUpdateModal();
+                click: function() {
+                    $("#updateStudentName, #updateCourse, #updateStudentGrade").removeClass("is-invalid");
+                    $("#updateModal").modal();
                     selectedStudentID = parseInt($(this).closest('tr').attr('id'));
                     let studentIndex = student_array.indexOf(studentObj);
                     $('.update-modal-title').text("Updating " + student_array[studentIndex].name + "'s Entry");
                     $('#updateStudentName').val(student_array[studentIndex].name);
                     $("#updateCourse").val(student_array[studentIndex].course_name);
                     $("#updateStudentGrade").val(student_array[studentIndex].grade);
-                  }
+                }
             },
       });
       var deleteButtonContainer = $('<td>', {
@@ -125,8 +130,13 @@ function renderStudentOnDom(studentObj){
                               var ajaxConfig = {
                                     data: sendData,
                                     dataType: 'json',
-                                    method: 'GET',
+                                    method: 'POST',
                                     url: 'data.php',
+                                    success: function(response) {
+                                        if (!response.success) {
+                                            displayErrorModal(response.errors[0]);
+                                        }
+                                    }
                               }
                               $.ajax(ajaxConfig);
                         }
@@ -179,13 +189,17 @@ function updateStudentServer() {
     var ajaxConfig = {
         data: sendData,
         dataType: 'json',
-        method: 'GET',
+        method: 'POST',
         url: 'data.php',
         success: function(response) {
-            handleGetDataClick();
-            $('#updateModal').modal('toggle');
-            $("#updateStudentName, #updateCourse, #updateStudentGrade").val("");
-      }
+            if (response.success) {
+                handleGetDataClick();
+                $('#updateModal').modal('toggle');
+                $("#updateStudentName, #updateCourse, #updateStudentGrade").val("");
+            } else {
+                displayErrorModal(response.errors[0]);
+            }
+        }
     }
     $.ajax(ajaxConfig);
     calculateGradeAverage(student_array);
@@ -193,57 +207,73 @@ function updateStudentServer() {
 }
 
 function calculateGradeAverage(studentObj){
-      var studentGradeTotal = null;
-      for (var gradeCount = 0; gradeCount < studentObj.length; gradeCount++) {
-            var gradeNum = parseInt(studentObj[gradeCount].grade);
-            studentGradeTotal+=gradeNum;
-      }
-      if (studentObj.length === 0) {
-            studentObj.length = 1;
-      }
-      studentGradeAvg = studentGradeTotal / studentObj.length;
+    var studentGradeTotal = null;
+    for (var gradeCount = 0; gradeCount < studentObj.length; gradeCount++) {
+        var gradeNum = parseInt(studentObj[gradeCount].grade);
+        studentGradeTotal+=gradeNum;
+    }
+    if (studentObj.length === 0) {
+        studentObj.length = 1;
+    }
+    studentGradeAvg = studentGradeTotal / studentObj.length;
 }
 
 function renderGradeAverage(){
-      var gradeRound = Math.round(studentGradeAvg);
-      $('.avgGrade').text(gradeRound);
+    var gradeRound = Math.round(studentGradeAvg);
+    $('.avgGrade').text(gradeRound);
 }
 
 function removeStudent(studentNum) {
-      student_array.splice(studentNum, 1);
+    student_array.splice(studentNum, 1);
 }
 
 function handleGetDataClick() {
-      $('tbody').empty();
-      student_array = [];
-      getFromServer();
+    $('tbody').empty();
+    student_array = [];
+    getFromServer();
 }
 
 function getFromServer() {
-      var sendData = {action:'readAll'};
-      var ajaxConfig = {
-            data: sendData,
-            dataType: 'json',
-            method: 'GET',
-            url: 'data.php',
-            success: function(response) {
-                  var serverList = response.data;
-                  for (var listCount = 0; listCount < serverList.length; listCount++) {
-                        student_array.push(serverList[listCount]);
-                        updateStudentList(serverList[listCount]);
-                  }
-            },
-            error: handleError
+    var sendData = {action:'readAll'};
+    var ajaxConfig = {
+        data: sendData,
+        dataType: 'json',
+        method: 'POST',
+        url: 'data.php',
+        success: function(response) {
+            if (response.success) {
+                var serverList = response.data;
+                for (var listCount = 0; listCount < serverList.length; listCount++) {
+                    student_array.push(serverList[listCount]);
+                    updateStudentList(serverList[listCount]);
+                }
+            } else {
+                displayErrorModal(response.errors[0]);
+            }
+        }
     }
     $.ajax(ajaxConfig);
 }
 
-function displayUpdateModal() {
-      $("#updateModal").modal();
-}
-
-function handleError(xhr, status, error) {
-      console.log(xhr);
-      console.log(status);
-      console.log(error);
-}
+function displayErrorModal(error) {
+    let errorText = "";
+    $('#errorModal').modal('toggle');
+    switch(error) {
+        case 'database error': 
+            errorText = 'Failed to connect to database. Please try again later. If error persists, please contact the system administrator.';
+            break;
+        case 'update error':
+            $('#updateModal').modal('toggle');
+            errorText = 'Update failed. Try to change the student\'s entry. If error persists, please contact the system administrator.';
+            break;
+        case 'delete error':
+            errorText = 'Deletion failed. If error persists, please contact the system administrator.';
+            break;
+        case 'no data':
+            errorText = 'No data available. If error persists, please contact the system administrator.';
+            break;
+        default:
+            errorText = 'Unknown error occured. Please contact the system administrator.';
+    }
+    $('.modalErrorMessage').text(errorText);
+};
