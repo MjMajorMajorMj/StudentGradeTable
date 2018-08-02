@@ -20,15 +20,19 @@ function addClickHandlersToElements(){
 }
 
 function handleAddClicked(){
-      addStudent();
+    addStudent();
 }
 
 function handleCancelClick(){
-      clearAddStudentFormInputs();
+    clearAddStudentFormInputs();
 }
 
 function handleUpdateClick() {
     updateStudentServer();
+}
+
+function resetConfirmDelete() {
+    $('.confirmDeleteButton').removeClass('btn-outline-danger confirmDeleteButton').addClass('btn-danger').text("Delete");
 }
 
 function addStudent(){
@@ -120,45 +124,85 @@ function renderStudentOnDom(studentObj){
             type: "button",
             class: "btn btn-danger deleteButton",
             on: {
-                  click: function() {
-                        var studentID = parseInt($(this).closest('tr').attr('id'));
-                        $(this).closest('tr').remove();
-                        var studentIndex = student_array.indexOf(studentObj);
-                        removeStudent(studentIndex);
-                        function deleteFromServer() {
-                              var sendData = {id: studentID, action:'delete'};
-                              var ajaxConfig = {
-                                    data: sendData,
-                                    dataType: 'json',
-                                    method: 'POST',
-                                    url: 'data.php',
-                                    success: function(response) {
-                                        if (!response.success) {
-                                            displayErrorModal(response.errors[0]);
-                                        }
-                                    }
-                              }
-                              $.ajax(ajaxConfig);
-                        }
-                        deleteFromServer();
-                        calculateGradeAverage(student_array);
-                        renderGradeAverage();
-                  }
+                click: function() {
+                    $(this).hide();
+                    $('.confirmDeleteContainer').show();
+                    /*$(this).removeClass('btn-danger').addClass('btn-outline-danger confirmDeleteButton').text("Confirm");
+                    $('.confirmDeleteButton').on('click', function() {
+                        const deleteStudentID = parseInt($(this).closest('tr').attr('id'));
+                        const deleteStudentIndex = student_array.indexOf(studentObj);
+                        deleteStudentFromServer(deleteStudentID, deleteStudentIndex);
+                    });*/
+                }
             },
       });
-      $(updateButtonContainer).append(updateButton);
-      $(deleteButtonContainer).append(deleteButton);
-      var studentListContainer = $('<tr>', {
-            id: studentObj.id
-      });
-      studentListContainer.append(studentName, studentCourse, studentGrade, updateButtonContainer, deleteButtonContainer);
-      $('tbody').append(studentListContainer);
+
+    let confirmDeleteContainer = $('<td>', {
+        class: "confirmDeleteContainer btn-group",
+        role: "group",
+    });
+    let confirmDeleteButton =  $('<button>', {
+        text: 'Confirm',
+        type: "button",
+        class: "btn btn-outline-danger confirmDeleteButton",
+        on: {
+            click: function() {
+                    const deleteStudentID = parseInt($(this).closest('tr').attr('id'));
+                    const deleteStudentIndex = student_array.indexOf(studentObj);
+                    deleteStudentFromServer(deleteStudentID, deleteStudentIndex);
+            }
+        },
+    });
+    let cancelConfirmButton =  $('<button>', {
+        text: 'Cancel',
+        type: "button",
+        class: "btn btn-outline-secondary cancelConfirmButton",
+        on: {
+            click: function() {
+                    const deleteStudentID = parseInt($(this).closest('tr').attr('id'));
+                    const deleteStudentIndex = student_array.indexOf(studentObj);
+                    deleteStudentFromServer(deleteStudentID, deleteStudentIndex);
+            }
+        },
+    });
+
+    $(updateButtonContainer).append(updateButton);
+    $(deleteButtonContainer).append(deleteButton);
+    var studentListContainer = $('<tr>', {
+        id: studentObj.id
+    });
+    studentListContainer.append(studentName, studentCourse, studentGrade, updateButtonContainer, deleteButtonContainer);
+    $('tbody').append(studentListContainer);
 }
 
 function updateStudentList(student){
       renderStudentOnDom(student);;
       calculateGradeAverage(student_array);
       renderGradeAverage();
+}
+
+function deleteStudentFromServer(studentID, studentIndex) {
+    const deletedStudentID = '#' + studentID;
+    $(deletedStudentID).remove();
+    removeStudent(studentIndex);
+    function deleteFromServer() {
+          var sendData = {id: studentID, action:'delete'};
+          var ajaxConfig = {
+                data: sendData,
+                dataType: 'json',
+                method: 'POST',
+                url: 'data.php',
+                success: function(response) {
+                    if (!response.success) {
+                        displayErrorModal(response.errors[0]);
+                    }
+                }
+          }
+          $.ajax(ajaxConfig);
+    }
+    deleteFromServer();
+    calculateGradeAverage(student_array);
+    renderGradeAverage();
 }
 
 function updateStudentServer() {
