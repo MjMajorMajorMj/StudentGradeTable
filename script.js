@@ -20,15 +20,15 @@ function addClickHandlersToElements() {
 
 function handleAddClicked() {
     addStudent();
-}
+};
 
 function handleCancelClick() {
     clearAddStudentFormInputs();
-}
+};
 
 function handleUpdateClick() {
     updateStudentServer();
-}
+};
 
 function addStudent() {
     let invalidTrigger = 0;
@@ -112,7 +112,7 @@ function renderStudentOnDom(studentObj) {
         },
     });
     var deleteButtonContainer = $('<td>', {
-        class: "deleteButtonContainer btn-group"
+        class: "deleteButtonContainer"
     });
     var deleteButton = $('<button>', {
         text: 'Delete',
@@ -120,21 +120,48 @@ function renderStudentOnDom(studentObj) {
         class: "btn btn-danger deleteButton",
         on: {
             click: function () {
-                $(this).removeClass('btn-danger').addClass('btn-outline-danger confirmDeleteButton').text("Confirm");
-                $('.confirmDeleteButton').on('click', function () {
-                    const deleteStudentID = parseInt($(this).closest('tr').attr('id'));
-                    const deleteStudentIndex = student_array.indexOf(studentObj);
-                    deleteStudentFromServer(deleteStudentID, deleteStudentIndex);
-                });
+                $(this).parent().hide();
+                $(this).parent().siblings('.updateButtonContainer').hide();
+                $(this).parent().siblings(".confirmDeleteContainer").show();
             }
         },
     });
+    var confirmDeleteContainer = $('<td>', {
+        class: "confirmDeleteContainer btn-group",
+    });
+    var confirmDeleteButton = $('<button>', {
+        text: 'Confirm',
+        type: "button",
+        class: "btn btn-outline-danger confirmDeleteButton",
+        on: {
+            click: function () {
+                const deleteStudentID = parseInt($(this).closest('tr').attr('id'));
+                const deleteStudentIndex = student_array.indexOf(studentObj);
+                deleteStudentFromServer(deleteStudentID, deleteStudentIndex);
+            }
+        },
+    });
+    var cancelConfirmButton = $('<button>', {
+        text: 'Cancel',
+        type: "button",
+        class: "btn btn-outline-secondary cancelConfirmButton",
+        on: {
+            click: function () {
+                $(this).parent().hide();
+                $(this).parent().siblings(".deleteButtonContainer").show();
+                $(this).parent().siblings(".updateButtonContainer").show();
+            }
+        },
+    });
+
     $(updateButtonContainer).append(updateButton);
     $(deleteButtonContainer).append(deleteButton);
+    $(confirmDeleteContainer).append(confirmDeleteButton, cancelConfirmButton);
+    $(confirmDeleteContainer).hide();
     var studentListContainer = $('<tr>', {
         id: studentObj.id
     });
-    studentListContainer.append(studentName, studentCourse, studentGrade, updateButtonContainer, deleteButtonContainer);
+    studentListContainer.append(studentName, studentCourse, studentGrade, updateButtonContainer, deleteButtonContainer, confirmDeleteContainer);
     $('tbody').append(studentListContainer);
 }
 
