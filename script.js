@@ -5,7 +5,7 @@ var selectedStudentID = null;
 
 function initializeApp() {
     addClickHandlersToElements();
-    getFromServer();
+    handleGetDataClick();
 }
 
 function addClickHandlersToElements() {
@@ -167,7 +167,7 @@ function renderStudentOnDom(studentObj) {
 
 function updateStudentList(student) {
     renderStudentOnDom(student);
-    calculateGradeAverage(student_array);
+    calculateGradeAverage();
 }
 
 function deleteStudentFromServer(studentID, studentIndex) {
@@ -190,7 +190,7 @@ function deleteStudentFromServer(studentID, studentIndex) {
         $.ajax(ajaxConfig);
     }
     deleteFromServer();
-    calculateGradeAverage(student_array);
+    calculateGradeAverage();
 }
 
 function updateStudentServer() {
@@ -234,20 +234,25 @@ function updateStudentServer() {
         }
     }
     $.ajax(ajaxConfig);
-    calculateGradeAverage(student_array);
+    calculateGradeAverage();
 }
 
-function calculateGradeAverage(studentObj) {
-    var studentGradeTotal = null;
-    for (var gradeCount = 0; gradeCount < studentObj.length; gradeCount++) {
-        var gradeNum = parseInt(studentObj[gradeCount].grade);
-        studentGradeTotal += gradeNum;
+function calculateGradeAverage() {
+    let ajaxConfig = {
+        data: { action: 'average'},
+        dataType: 'json',
+        method: 'POST',
+        url: 'data.php',
+        success: function (response) {
+            if (response.success) {
+                const averageGradeNum = response.data[0]["AVG(`grade`)"];
+                renderGradeAverage(averageGradeNum);
+            } else {
+                displayErrorModal(response.errors[0]);
+            }
+        }
     }
-    if (studentObj.length === 0) {
-        studentObj.length = 1;
-    }
-    let studentGradeAvg = studentGradeTotal / studentObj.length;
-    renderGradeAverage(studentGradeAvg);
+    $.ajax(ajaxConfig);
 }
 
 function renderGradeAverage(gradeAverage) {
@@ -262,11 +267,11 @@ function removeStudent(studentNum) {
 function handleGetDataClick() {
     $('tbody').empty();
     student_array = [];
-    getFromServer();
+    getFromServer(0,10);
 }
 
-function getFromServer() {
-    var sendData = { action: 'readAll' };
+function getFromServer(sqlOffsetNum, sqlLimitNum) {
+    var sendData = { action: 'readAll', sqlOffset: sqlOffsetNum, sqlLimit: sqlLimitNum };
     var ajaxConfig = {
         data: sendData,
         dataType: 'json',
