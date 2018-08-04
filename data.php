@@ -25,6 +25,9 @@ switch($_POST['action']){
 	case 'update':
 		include 'dataApi/update.php';
 		break;
+	case 'average':
+		include 'dataApi/averagegrade.php';
+		break;
 };
 
 $outputJSON = json_encode($output);

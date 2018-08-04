@@ -1,8 +1,5 @@
 <?php
-$sqlOffset = intval($_POST['sqlOffset']);
-$sqlLimit = intval($_POST['sqlLimit']);
-
-$query = "SELECT * FROM `student_data` LIMIT $sqlOffset, $sqlLimit";
+$query = "SELECT AVG(`grade`) FROM `student_data`";
 $result = null;
 
 $result = mysqli_query($conn, $query);

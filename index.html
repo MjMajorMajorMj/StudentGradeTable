@@ -1,153 +1,188 @@
 <!doctype html>
 <html>
+
 <head>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+        crossorigin="anonymous">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
     <script src="script.js"></script>
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
 </head>
+
 <body>
-<div class="col-sm-12">
     <div class="col-sm-12">
-        <!-- only show this element when the isnt on mobile -->
-        <h1 class="d-none d-sm-block order-1">Student Grade Table
-            <small class="text-right order-2 float-right">Grade Average: <span class="avgGrade badge badge-secondary">0</span></small>
-        </h1>
-        <!-- only show this element when the user gets to a mobile version -->
-        <h3 class="d-block d-sm-none order-1">Student Grade Table
-            <small class="text-nowrap order-2">Grade Average: <span class="avgGrade badge badge-secondary">0</span></small>
-        </h3>
-    </div>
-    <div class="student-add-form col-sm-2 col-xs-12 float-sm-right form-group">
-        <h4>Add Student</h4>
-        <div class="input-group form-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1"><i class="fas fa-user-graduate"></i></span>
-            </div>
-            <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name">
-            <div class="invalid-feedback">
-                Please input a valid name.
-            </div>
+        <div class="col-sm-12">
+            <h1 class="d-none d-sm-block order-1">Student Grade Table
+                <small class="text-right order-2 float-right">Grade Average:
+                    <span class="avgGrade badge badge-secondary">0</span>
+                </small>
+            </h1>
+            <h3 class="d-block d-sm-none order-1">Student Grade Table
+                <small class="text-nowrap order-2">Grade Average:
+                    <span class="avgGrade badge badge-secondary">0</span>
+                </small>
+            </h3>
         </div>
-        <div class="input-group form-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1"><i class="fas fa-book"></i></span>
-            </div>
-            <input type="text" class="form-control" name="course" id="course" placeholder="Student Course">
-            <div class="invalid-feedback">
-                Please input a valid course.
-            </div>
-        </div>
-        <div class="input-group form-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1"><i class="fas fa-pencil-ruler"></i></span>
-            </div>
-            <input type="text" class="form-control" name="studentGrade" id="studentGrade" placeholder="Student Grade">
-            <div class="invalid-feedback">
-                Please input a valid grade.
-            </div>
-        </div>
-        <button type="button" class="btn btn-success btnAdd" onclick="">Add</button>
-        <button type="button" class="btn btn-secondary btnCancel" onclick="">Cancel</button>
-        <button type="button" class="btn btn-primary btnGetData" onclick="">Refresh</button>
-    </div>
-    <div class="student-list-container col-sm-10 col-xs-12">
-        <table class="student-list table">
-            <thead>
-            <tr>
-                <th>Student Name</th>
-                <th>Student Course</th>
-                <th>Student Grade</th>
-                <th>Tools</th>
-            </tr>
-            </thead>
-            <tbody>
-              
-            </tbody>
-        </table>
-    </div>
-
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-      </nav>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="errorModal">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Error</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <p class='modalErrorMessage'></p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="updateModal">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title update-modal-title">Update Student</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <p class='modalUpdate'></p>
-                <div class="student-add-form form-group">
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-user-graduate"></i></span>
-                        </div>
-                        <input type="text" class="form-control" name="studentName" id="updateStudentName" placeholder="Student Name">
-                        <div class="invalid-feedback">
-                            Please input a valid name.
-                        </div>
-                    </div>
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-book"></i></span>
-                        </div>
-                        <input type="text" class="form-control" name="course" id="updateCourse" placeholder="Student Course">
-                        <div class="invalid-feedback">
-                            Please input a valid course.
-                        </div>
-                    </div>
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-pencil-ruler"></i></span>
-                        </div>
-                    <input type="text" class="form-control" name="studentGrade" id="updateStudentGrade" placeholder="Student Grade">
-                    <div class="invalid-feedback">
-                        Please input a valid grade.
-                    </div>      
+        <div class="student-add-form col-sm-2 col-xs-12 float-sm-right form-group">
+            <h4>Add Student</h4>
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="fas fa-user-graduate"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name">
+                <div class="invalid-feedback">
+                    Please input a valid name.
                 </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-success btnUpdateToServer">Save changes</button>
-              <button type="button" class="btn btn-danger btnCancelUpdate" data-dismiss="modal">Cancel</button>
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="fas fa-book"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control" name="course" id="course" placeholder="Student Course">
+                <div class="invalid-feedback">
+                    Please input a valid course.
+                </div>
+            </div>
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="fas fa-pencil-ruler"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control" name="studentGrade" id="studentGrade" placeholder="Student Grade">
+                <div class="invalid-feedback">
+                    Please input a valid grade.
+                </div>
+            </div>
+            <button type="button" class="btn btn-success btnAdd" onclick="">Add</button>
+            <button type="button" class="btn btn-secondary btnCancel" onclick="">Cancel</button>
+            <button type="button" class="btn btn-primary btnGetData" onclick="">Refresh</button>
+        </div>
+        <div class="student-list-container col-sm-10 col-xs-12">
+            <table class="student-list table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Student Course</th>
+                        <th>Student Grade</th>
+                        <th>Tools</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+        <nav aria-label="Student list">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link firstPage">First</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link navPageOne">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link navPageTwo">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link navPageThree">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link navPageFour">4</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link navPageFive">5</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link lastPage">Last</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="errorModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class='modalErrorMessage'></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="updateModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title update-modal-title">Update Student</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class='modalUpdate'></p>
+                    <div class="student-add-form form-group">
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <i class="fas fa-user-graduate"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" name="studentName" id="updateStudentName" placeholder="Student Name">
+                            <div class="invalid-feedback">
+                                Please input a valid name.
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <i class="fas fa-book"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" name="course" id="updateCourse" placeholder="Student Course">
+                            <div class="invalid-feedback">
+                                Please input a valid course.
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <i class="fas fa-pencil-ruler"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" name="studentGrade" id="updateStudentGrade" placeholder="Student Grade">
+                            <div class="invalid-feedback">
+                                Please input a valid grade.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success btnUpdateToServer">Save changes</button>
+                        <button type="button" class="btn btn-danger btnCancelUpdate" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 </body>
-</html>
 
+</html>
