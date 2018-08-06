@@ -2,7 +2,6 @@ $(document).ready(initializeApp);
 
 var student_array = [];
 var selectedStudentID = null;
-var numOfStudents = 0;
 var pageNum = 0;
 
 function initializeApp() {
@@ -271,10 +270,14 @@ function removeStudent(studentNum) {
 }
 
 function handleGetDataClick() {
-    $('tbody').empty();
-    student_array = [];
+    clearStudentList();
     getFromServer(0,10);
 }
+
+function clearStudentList() {
+    $('tbody').empty();
+    student_array = [];
+};
 
 function getFromServer(sqlOffsetNum, sqlLimitNum) {
     var sendData = { action: 'readAll', sqlOffset: sqlOffsetNum, sqlLimit: sqlLimitNum };
@@ -299,18 +302,9 @@ function getFromServer(sqlOffsetNum, sqlLimitNum) {
 }
 
 function addClickHandlersToPagination() {
-    $('.firstPage').on('click', function() {
-        handleGetDataClick();
-        $('.page-item').removeClass('active');
-        $('.page-item-two').addClass('active');
-    });
-    $('.lastPage').on('click', function() {
-        $('tbody').empty();
-        student_array = [];
-        getFromServer(90,10);
-        $('.page-item').removeClass('active');
-        $('.page-item-six').addClass('active');
-    })
+    $('.firstPage').on('click', firstPageButtonFunction);
+    $('.lastPage').on('click', lastPageButtonFunction);
+    $('.navPage').on('click', navPageButtonFunction);
 }
 
 function fetchNumberOfStudentsAndPages() {
@@ -321,9 +315,7 @@ function fetchNumberOfStudentsAndPages() {
         url: 'data.php',
         success: function (response) {
             if (response.success) {
-                numOfStudents = response.data[0];
                 pageNum = response.data[1];
-                handlePagination(numOfStudents,pageNum);
             } else {
                 displayErrorModal(response.errors[0]);
             }
@@ -331,6 +323,56 @@ function fetchNumberOfStudentsAndPages() {
     }
     $.ajax(ajaxConfig);
 }
+
+function firstPageButtonFunction() {
+    handleGetDataClick();
+    $('.page-item').removeClass('active');
+    $('.navPageOne').text(1).parent().addClass('active');
+    $('.navPageTwo').text(2);
+    $('.navPageThree').text(3);
+    $('.navPageFour').text(4);
+    $('.navPageFive').text(5);
+};
+
+function lastPageButtonFunction() {
+    clearStudentList();
+    const lastPageNum = (pageNum*10)-10;
+    getFromServer(lastPageNum,10);
+    $('.page-item').removeClass('active');
+    $('.navPageOne').text(pageNum-4);
+    $('.navPageTwo').text(pageNum-3);
+    $('.navPageThree').text(pageNum-2);
+    $('.navPageFour').text(pageNum-1);
+    $('.navPageFive').text(pageNum).parent().addClass('active');
+};
+
+function navPageButtonFunction() {
+    $('.page-item').removeClass('active');
+    const selectedPageNum = parseInt($(this).text());
+    clearStudentList();
+    getFromServer((selectedPageNum*10)-10,10);
+    if (selectedPageNum < 4) {
+        $('.navPageOne').text(1);
+        $('.navPageTwo').text(2);
+        $('.navPageThree').text(3);
+        $('.navPageFour').text(4);
+        $('.navPageFive').text(5);
+        $(this).parent().addClass('active');
+    } else if (selectedPageNum >= pageNum-2 && selectedPageNum <= pageNum) {
+        $('.navPageOne').text(pageNum-4);
+        $('.navPageTwo').text(pageNum-3);
+        $('.navPageThree').text(pageNum-2);
+        $('.navPageFour').text(pageNum-1);
+        $('.navPageFive').text(pageNum);
+        $(this).parent().addClass('active');
+    } else {
+        $('.navPageOne').text(selectedPageNum-2);
+        $('.navPageTwo').text(selectedPageNum-1);
+        $('.navPageThree').text(selectedPageNum).parent().addClass('active');
+        $('.navPageFour').text(selectedPageNum+1);
+        $('.navPageFive').text(selectedPageNum+2);
+    }
+};
 
 function displayErrorModal(error) {
     let errorText = "";
