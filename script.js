@@ -2,10 +2,14 @@ $(document).ready(initializeApp);
 
 var student_array = [];
 var selectedStudentID = null;
+var numOfStudents = 0;
+var pageNum = 0;
 
 function initializeApp() {
     addClickHandlersToElements();
+    addClickHandlersToPagination();
     handleGetDataClick();
+    fetchNumberOfStudentsAndPages();
 }
 
 function addClickHandlersToElements() {
@@ -182,7 +186,10 @@ function deleteStudentFromServer(studentID, studentIndex) {
             method: 'POST',
             url: 'data.php',
             success: function (response) {
-                if (!response.success) {
+                if (response.success) {
+                    handleGetDataClick();
+                    calculateGradeAverage();
+                } else {
                     displayErrorModal(response.errors[0]);
                 }
             }
@@ -190,7 +197,6 @@ function deleteStudentFromServer(studentID, studentIndex) {
         $.ajax(ajaxConfig);
     }
     deleteFromServer();
-    calculateGradeAverage();
 }
 
 function updateStudentServer() {
@@ -284,6 +290,40 @@ function getFromServer(sqlOffsetNum, sqlLimitNum) {
                     student_array.push(serverList[listCount]);
                     updateStudentList(serverList[listCount]);
                 }
+            } else {
+                displayErrorModal(response.errors[0]);
+            }
+        }
+    }
+    $.ajax(ajaxConfig);
+}
+
+function addClickHandlersToPagination() {
+    $('.firstPage').on('click', function() {
+        handleGetDataClick();
+        $('.page-item').removeClass('active');
+        $('.page-item-two').addClass('active');
+    });
+    $('.lastPage').on('click', function() {
+        $('tbody').empty();
+        student_array = [];
+        getFromServer(90,10);
+        $('.page-item').removeClass('active');
+        $('.page-item-six').addClass('active');
+    })
+}
+
+function fetchNumberOfStudentsAndPages() {
+    var ajaxConfig = {
+        data: {action:'pagination'},
+        dataType: 'json',
+        method: 'POST',
+        url: 'data.php',
+        success: function (response) {
+            if (response.success) {
+                numOfStudents = response.data[0];
+                pageNum = response.data[1];
+                handlePagination(numOfStudents,pageNum);
             } else {
                 displayErrorModal(response.errors[0]);
             }
