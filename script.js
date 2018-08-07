@@ -19,7 +19,14 @@ function addClickHandlersToElements() {
     $('.btnCancelUpdate').on('click', function () {
         $("#updateStudentName, #updateCourse, #updateStudentGrade").removeClass("is-invalid");
     });
-}   
+    $('.goToPageBtn').on('click', gotoPage);
+};
+
+function addClickHandlersToPagination() {
+    $('.firstPage').on('click', firstPageButtonFunction);
+    $('.lastPage').on('click', lastPageButtonFunction);
+    $('.navPage').on('click', navPageButtonFunction);
+};
 
 function handleAddClicked() {
     addStudent();
@@ -85,6 +92,7 @@ function addStudentLastPage() {
     if (student_array.length > 10 && currentPageNum === pageNum) {
         pageNum++;
         lastPageButtonFunction();
+        goToPagePlaceholder(pageNum);
     } else {
         lastPageButtonFunction();
     };
@@ -152,7 +160,7 @@ function renderStudentOnDom(studentObj) {
         },
     });
     var confirmDeleteContainer = $('<td>', {
-        class: "confirmDeleteContainer btn-group",
+        class: "confirmDeleteContainer btn-group float-right",
     });
     var confirmDeleteButton = $('<button>', {
         text: 'Confirm',
@@ -224,6 +232,8 @@ function deletedStudentSuccess() {
     if (student_array.length === 0) {
         pageNum--;
         lastPageButtonFunction();
+        calculateGradeAverage();
+        goToPagePlaceholder(pageNum);
         return;
     } else {
         currentPageNum = getCurrentPageNum();
@@ -343,12 +353,6 @@ function handleServerDataToDOM (list) {
     };
 };
 
-function addClickHandlersToPagination() {
-    $('.firstPage').on('click', firstPageButtonFunction);
-    $('.lastPage').on('click', lastPageButtonFunction);
-    $('.navPage').on('click', navPageButtonFunction);
-}
-
 function fetchNumberOfStudentsAndPages() {
     var ajaxConfig = {
         data: {action:'pagination'},
@@ -358,6 +362,7 @@ function fetchNumberOfStudentsAndPages() {
         success: function (response) {
             if (response.success) {
                 pageNum = response.data[1];
+                goToPagePlaceholder(pageNum);
             } else {
                 displayErrorModal(response.errors[0]);
             }
@@ -367,7 +372,8 @@ function fetchNumberOfStudentsAndPages() {
 }
 
 function firstPageButtonFunction() {
-    handleGetDataClick();
+    clearStudentList();
+    getFromServer(0,10);
     $('.page-item').removeClass('active');
     $('.navPageOne').text(1).parent().addClass('active');
     $('.navPageTwo').text(2);
@@ -389,8 +395,12 @@ function lastPageButtonFunction() {
 };
 
 function navPageButtonFunction() {
+    const selectedPageBtnNum = parseInt($(this).text());
+    navPageFunction(selectedPageBtnNum);
+};
+
+function navPageFunction(selectedPageNum) {
     $('.page-item').removeClass('active');
-    const selectedPageNum = parseInt($(this).text());
     clearStudentList();
     getFromServer((selectedPageNum*10)-10,10);
     if (selectedPageNum < 4) {
@@ -419,6 +429,21 @@ function navPageButtonFunction() {
         $('.navPageFive').text(selectedPageNum+2);
     }
 };
+
+function goToPagePlaceholder(num) {
+    $('.goToPage').attr("placeholder", "Go To Pages 1- " + num);
+};
+
+function gotoPage() {
+    const inputNum = parseInt($('.goToPage').val());
+    if (inputNum<1 || inputNum > pageNum) {
+        $('.goToPage').addClass('is-invalid');
+        return;
+    }
+    $('.goToPage').val("");
+    $('.goToPage').removeClass('is-invalid');
+    navPageFunction(inputNum);
+}
 
 function displayErrorModal(error) {
     let errorText = "";
