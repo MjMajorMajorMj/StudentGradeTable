@@ -19,7 +19,7 @@ function addClickHandlersToElements() {
     $('.btnCancelUpdate').on('click', function () {
         $("#updateStudentName, #updateCourse, #updateStudentGrade").removeClass("is-invalid");
     });
-}
+}   
 
 function handleAddClicked() {
     addStudent();
@@ -71,6 +71,8 @@ function addStudent() {
             if (response.success) {
                 student_array[student_array.length - 1].id = response.insertID;
                 updateStudentList(student_array[student_array.length - 1]);
+                fetchNumberOfStudentsAndPages();
+                lastPageButtonFunction();
             } else {
                 displayErrorModal(response.errors[0]);
             }
@@ -233,13 +235,13 @@ function updateStudentServer() {
                 handleGetDataClick();
                 $('#updateModal').modal('toggle');
                 $("#updateStudentName, #updateCourse, #updateStudentGrade").val("");
+                calculateGradeAverage();
             } else {
                 displayErrorModal(response.errors[0]);
             }
         }
     }
     $.ajax(ajaxConfig);
-    calculateGradeAverage();
 }
 
 function calculateGradeAverage() {
@@ -288,11 +290,8 @@ function getFromServer(sqlOffsetNum, sqlLimitNum) {
         url: 'data.php',
         success: function (response) {
             if (response.success) {
-                var serverList = response.data;
-                for (var listCount = 0; listCount < serverList.length; listCount++) {
-                    student_array.push(serverList[listCount]);
-                    updateStudentList(serverList[listCount]);
-                }
+                const serverList = response.data;
+                handleServerDataToDOM(serverList);
             } else {
                 displayErrorModal(response.errors[0]);
             }
@@ -300,6 +299,13 @@ function getFromServer(sqlOffsetNum, sqlLimitNum) {
     }
     $.ajax(ajaxConfig);
 }
+
+function handleServerDataToDOM (list) {
+    for (var listCount = 0; listCount < list.length; listCount++) {
+        student_array.push(list[listCount]);
+        updateStudentList(list[listCount]);
+    };
+};
 
 function addClickHandlersToPagination() {
     $('.firstPage').on('click', firstPageButtonFunction);
@@ -352,19 +358,23 @@ function navPageButtonFunction() {
     clearStudentList();
     getFromServer((selectedPageNum*10)-10,10);
     if (selectedPageNum < 4) {
-        $('.navPageOne').text(1);
-        $('.navPageTwo').text(2);
-        $('.navPageThree').text(3);
-        $('.navPageFour').text(4);
-        $('.navPageFive').text(5);
-        $(this).parent().addClass('active');
-    } else if (selectedPageNum >= pageNum-2 && selectedPageNum <= pageNum) {
-        $('.navPageOne').text(pageNum-4);
-        $('.navPageTwo').text(pageNum-3);
-        $('.navPageThree').text(pageNum-2);
-        $('.navPageFour').text(pageNum-1);
-        $('.navPageFive').text(pageNum);
-        $(this).parent().addClass('active');
+        let navPageUp = 1;
+        $('.navPage').each(function() {
+            this.text = navPageUp;
+            if (parseInt(this.text) === selectedPageNum) {
+                this.parentElement.className += " active";
+            };
+            navPageUp++;
+        });
+    } else if (selectedPageNum > pageNum-3 && selectedPageNum <= pageNum) {
+        let navPageDown = 4;
+        $('.navPage').each(function() {
+            this.text = pageNum - navPageDown;
+            if (parseInt(this.text) === selectedPageNum) {
+                this.parentElement.className += " active";
+            };
+            navPageDown--;
+        });
     } else {
         $('.navPageOne').text(selectedPageNum-2);
         $('.navPageTwo').text(selectedPageNum-1);
