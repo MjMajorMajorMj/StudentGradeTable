@@ -71,8 +71,7 @@ function addStudent() {
             if (response.success) {
                 student_array[student_array.length - 1].id = response.insertID;
                 updateStudentList(student_array[student_array.length - 1]);
-                fetchNumberOfStudentsAndPages();
-                lastPageButtonFunction();
+                addStudentLastPage();
             } else {
                 displayErrorModal(response.errors[0]);
             }
@@ -80,6 +79,27 @@ function addStudent() {
     }
     $.ajax(ajaxConfig);
 }
+
+function addStudentLastPage() {
+    const currentPageNum = getCurrentPageNum();
+    if (student_array.length > 10 && currentPageNum === pageNum) {
+        pageNum++;
+        lastPageButtonFunction();
+    } else {
+        lastPageButtonFunction();
+    };
+};
+
+function getCurrentPageNum() {
+    let currentPageNum = 1;
+    const activeRegex = /active\b/gm;
+    $('.page-item').each(function() {
+        if (activeRegex.test(this.className) === true) {
+            currentPageNum = parseInt(this.children[0].text);
+        };
+    });
+    return currentPageNum;
+};
 
 function clearAddStudentFormInputs() {
     $("#studentName, #course, #studentGrade").removeClass("is-invalid");
@@ -188,8 +208,7 @@ function deleteStudentFromServer(studentID, studentIndex) {
             url: 'data.php',
             success: function (response) {
                 if (response.success) {
-                    handleGetDataClick();
-                    calculateGradeAverage();
+                    deletedStudentSuccess();
                 } else {
                     displayErrorModal(response.errors[0]);
                 }
@@ -199,6 +218,21 @@ function deleteStudentFromServer(studentID, studentIndex) {
     }
     deleteFromServer();
 }
+
+function deletedStudentSuccess() {
+    let currentPageNum = 0;
+    if (student_array.length === 0) {
+        pageNum--;
+        lastPageButtonFunction();
+        return;
+    } else {
+        currentPageNum = getCurrentPageNum();
+    }
+    clearStudentList();
+    const offsetNum = (currentPageNum*10)-10;
+    getFromServer(offsetNum,10);
+    calculateGradeAverage();
+};
 
 function updateStudentServer() {
     let invalidTrigger = 0;
@@ -273,7 +307,9 @@ function removeStudent(studentNum) {
 
 function handleGetDataClick() {
     clearStudentList();
-    getFromServer(0,10);
+    const currentPageNum = getCurrentPageNum();
+    const offsetNum = (currentPageNum*10)-10;
+    getFromServer(offsetNum,10);
 }
 
 function clearStudentList() {
