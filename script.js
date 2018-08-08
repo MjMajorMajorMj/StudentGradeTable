@@ -228,7 +228,6 @@ function deleteStudentFromServer(studentID, studentIndex) {
 }
 
 function deletedStudentSuccess() {
-    let currentPageNum = 0;
     if (student_array.length === 0) {
         pageNum--;
         lastPageButtonFunction();
@@ -236,12 +235,12 @@ function deletedStudentSuccess() {
         goToPagePlaceholder(pageNum);
         return;
     } else {
-        currentPageNum = getCurrentPageNum();
-    }
-    clearStudentList();
-    const offsetNum = (currentPageNum*10)-10;
-    getFromServer(offsetNum,10);
-    calculateGradeAverage();
+        const currentPageNum = getCurrentPageNum();
+        clearStudentList();
+        const offsetNum = (currentPageNum*10)-10;
+        getFromServer(offsetNum,10);
+        calculateGradeAverage();
+    };
 };
 
 function updateStudentServer() {
@@ -436,8 +435,9 @@ function goToPagePlaceholder(num) {
 
 function gotoPage() {
     const inputNum = parseInt($('.goToPage').val());
-    if (inputNum<1 || inputNum > pageNum) {
+    if (inputNum<1 || inputNum > pageNum || isNaN(inputNum)) {
         $('.goToPage').addClass('is-invalid');
+        $('.goToPage').val("");
         return;
     }
     $('.goToPage').val("");
