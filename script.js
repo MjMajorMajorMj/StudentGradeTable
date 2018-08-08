@@ -125,7 +125,7 @@ function renderStudentOnDom(studentObj) {
         text: studentObj.grade
     });
     var updateButtonContainer = $('<td>', {
-        class: "updateButtonContainer"
+        class: "updateButtonContainer d-none d-sm-table-cell"
     });
     var updateButton = $('<button>', {
         text: 'Update',
@@ -145,7 +145,7 @@ function renderStudentOnDom(studentObj) {
         },
     });
     var deleteButtonContainer = $('<td>', {
-        class: "deleteButtonContainer"
+        class: "deleteButtonContainer d-none d-sm-table-cell"
     });
     var deleteButton = $('<button>', {
         text: 'Delete',
@@ -153,8 +153,8 @@ function renderStudentOnDom(studentObj) {
         class: "btn btn-danger deleteButton",
         on: {
             click: function () {
-                $(this).parent().hide();
-                $(this).parent().siblings('.updateButtonContainer').hide();
+                $(this).parent().removeClass("d-sm-table-cell");
+                $(this).parent().siblings('.updateButtonContainer').removeClass("d-sm-table-cell");
                 $(this).parent().siblings(".confirmDeleteContainer").show();
             }
         },
@@ -181,8 +181,8 @@ function renderStudentOnDom(studentObj) {
         on: {
             click: function () {
                 $(this).parent().hide();
-                $(this).parent().siblings(".deleteButtonContainer").show();
-                $(this).parent().siblings(".updateButtonContainer").show();
+                $(this).parent().siblings(".deleteButtonContainer").addClass("d-sm-table-cell");
+                $(this).parent().siblings(".updateButtonContainer").addClass("d-sm-table-cell");
             }
         },
     });
@@ -279,6 +279,7 @@ function updateStudentServer() {
                 $('#updateModal').modal('toggle');
                 $("#updateStudentName, #updateCourse, #updateStudentGrade").val("");
                 calculateGradeAverage();
+                $('.alert').alert();
             } else {
                 displayErrorModal(response.errors[0]);
             }
