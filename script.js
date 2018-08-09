@@ -101,7 +101,7 @@ function addStudentLastPage() {
 function getCurrentPageNum() {
     let currentPageNum = 1;
     const activeRegex = /active\b/gm;
-    $('.page-item').each(function() {
+    $('.page-item').each(function () {
         if (activeRegex.test(this.className) === true) {
             currentPageNum = parseInt(this.children[0].text);
         };
@@ -116,21 +116,23 @@ function clearAddStudentFormInputs() {
 
 function renderStudentOnDom(studentObj) {
     var studentName = $('<td>', {
-        text: studentObj.name
+        text: studentObj.name,
+        style: "overflow-wrap: break-word"
     });
     var studentCourse = $('<td>', {
-        text: studentObj.course_name
+        text: studentObj.course_name,
+        style: "overflow-wrap: break-word"
     });
     var studentGrade = $('<td>', {
         text: studentObj.grade
     });
     var updateButtonContainer = $('<td>', {
-        class: "updateButtonContainer d-none d-sm-table-cell"
+        class: "updateButtonContainer d-none d-md-table-cell"
     });
     var updateButton = $('<button>', {
         text: 'Update',
         type: "button",
-        class: "btn btn-info updateButton",
+        class: "btn btn-info updateButton mb-1",
         on: {
             click: function () {
                 $("#updateStudentName, #updateCourse, #updateStudentGrade").removeClass("is-invalid");
@@ -145,27 +147,27 @@ function renderStudentOnDom(studentObj) {
         },
     });
     var deleteButtonContainer = $('<td>', {
-        class: "deleteButtonContainer d-none d-sm-table-cell"
+        class: "deleteButtonContainer d-none d-md-table-cell"
     });
     var deleteButton = $('<button>', {
         text: 'Delete',
         type: "button",
-        class: "btn btn-danger deleteButton",
+        class: "btn btn-danger deleteButton mb-1",
         on: {
             click: function () {
-                $(this).parent().removeClass("d-sm-table-cell");
-                $(this).parent().siblings('.updateButtonContainer').removeClass("d-sm-table-cell");
-                $(this).parent().siblings(".confirmDeleteContainer").show();
+                $(this).parent().removeClass("d-md-table-cell");
+                $(this).parent().siblings('.updateButtonContainer').removeClass("d-md-table-cell");
+                $(this).parent().siblings(".confirmDeleteContainer").addClass("d-md-table-cell");
             }
         },
     });
     var confirmDeleteContainer = $('<td>', {
-        class: "confirmDeleteContainer btn-group float-right",
+        class: "confirmDeleteContainer d-none",
     });
     var confirmDeleteButton = $('<button>', {
         text: 'Confirm',
         type: "button",
-        class: "btn btn-outline-danger confirmDeleteButton",
+        class: "btn btn-outline-danger confirmDeleteButton mb-1",
         on: {
             click: function () {
                 const deleteStudentID = parseInt($(this).closest('tr').attr('id'));
@@ -177,32 +179,34 @@ function renderStudentOnDom(studentObj) {
     var cancelConfirmButton = $('<button>', {
         text: 'Cancel',
         type: "button",
-        class: "btn btn-outline-secondary cancelConfirmButton",
+        class: "btn btn-outline-secondary cancelConfirmButton mr-1 mb-1",
         on: {
             click: function () {
-                $(this).parent().hide();
-                $(this).parent().siblings(".deleteButtonContainer").addClass("d-sm-table-cell");
-                $(this).parent().siblings(".updateButtonContainer").addClass("d-sm-table-cell");
+                $(this).parent().removeClass("d-md-table-cell");
+                $(this).parent().siblings(".deleteButtonContainer").addClass("d-md-table-cell");
+                $(this).parent().siblings(".updateButtonContainer").addClass("d-md-table-cell");
             }
         },
     });
-    let dropDownContainer = $('<div>',{
-        class: 'dropdown d-table-cell d-sm-none pt-2'
+    let dropDownContainer = $('<div>', {
+        class: 'dropdown d-table-cell d-md-none pt-2'
     });
-    let dropDownToggle = $('<button>',{
+    let dropDownToggle = $('<button>', {
         class: 'btn btn-secondary dropdown-toggle',
         type: 'button',
         id: 'dropdownMenu',
         'data-toggle': 'dropdown',
         'aria-haspopup': 'true',
         'aria-expanded': 'false',
-        text: 'Tools'
+    });
+    let dropDownToggleIcon = $('<i>', {
+        class: "fas fa-cogs"
     });
     let dropdownMenu = $('<div>', {
         class: 'dropdown-menu dropdown-menu-right',
         'aria-labelledby': 'dropdownMenu'
     });
-    let dropdownUpdateBtn = $('<button>',{
+    let dropdownUpdateBtn = $('<button>', {
         class: 'dropdown-item dropdownUpdate',
         type: 'button',
         text: 'Update',
@@ -219,28 +223,32 @@ function renderStudentOnDom(studentObj) {
             }
         },
     });
-    let dropdownDeleteBtn = $('<button>',{
+    let dropdownDeleteBtn = $('<button>', {
         class: 'dropdown-item dropdownDelete',
         type: 'button',
         text: 'Delete',
         on: {
-            click: function() {
+            click: function () {
                 const deleteStudentID = parseInt($(this).closest('tr').attr('id'));
                 const deleteStudentIndex = student_array.indexOf(studentObj);
                 mobileConfirmDeleteFunction(deleteStudentID, deleteStudentIndex);
             }
         }
     });
-    $(dropdownMenu).append(dropdownUpdateBtn,dropdownDeleteBtn);
-    $(dropDownContainer).append(dropDownToggle,dropdownMenu);
+    let dropdownBtnSplit = $('<div>', {
+        class: 'dropdown-divider'
+    });
+    $(dropDownToggle).append(dropDownToggleIcon);
+    $(dropdownMenu).append(dropdownUpdateBtn, dropdownBtnSplit, dropdownDeleteBtn);
+    $(dropDownContainer).append(dropDownToggle, dropdownMenu);
     $(updateButtonContainer).append(updateButton);
     $(deleteButtonContainer).append(deleteButton);
-    $(confirmDeleteContainer).append(confirmDeleteButton, cancelConfirmButton);
+    $(confirmDeleteContainer).append(cancelConfirmButton, confirmDeleteButton);
     $(confirmDeleteContainer).hide();
     var studentListContainer = $('<tr>', {
         id: studentObj.id
     });
-    studentListContainer.append(studentName, studentCourse, studentGrade, updateButtonContainer, deleteButtonContainer, confirmDeleteContainer, dropDownContainer);
+    studentListContainer.append(studentName, studentCourse, studentGrade, deleteButtonContainer, updateButtonContainer, confirmDeleteContainer, dropDownContainer);
     $('tbody').append(studentListContainer);
 }
 
@@ -285,8 +293,8 @@ function deletedStudentSuccess() {
     } else {
         const currentPageNum = getCurrentPageNum();
         clearStudentList();
-        const offsetNum = (currentPageNum*10)-10;
-        getFromServer(offsetNum,10);
+        const offsetNum = (currentPageNum * 10) - 10;
+        getFromServer(offsetNum, 10);
         calculateGradeAverage();
     };
 };
@@ -294,7 +302,7 @@ function deletedStudentSuccess() {
 function mobileConfirmDeleteFunction(id, index) {
     $("#confirmDeleteMobileModal").modal();
     $('.confirmDeleteMobileMessage').text("Are you sure you want to delete " + student_array[index].name + "'s entry?");
-    $('.mobileConfirmDelete').one('click', function() {
+    $('.mobileConfirmDelete').one('click', function () {
         deleteStudentFromServer(id, index);
     });
 };
@@ -346,7 +354,7 @@ function updateStudentServer() {
 
 function calculateGradeAverage() {
     let ajaxConfig = {
-        data: { action: 'average'},
+        data: { action: 'average' },
         dataType: 'json',
         method: 'POST',
         url: 'data.php',
@@ -374,8 +382,8 @@ function removeStudent(studentNum) {
 function handleGetDataClick() {
     clearStudentList();
     const currentPageNum = getCurrentPageNum();
-    const offsetNum = (currentPageNum*10)-10;
-    getFromServer(offsetNum,10);
+    const offsetNum = (currentPageNum * 10) - 10;
+    getFromServer(offsetNum, 10);
 }
 
 function clearStudentList() {
@@ -402,11 +410,11 @@ function getFromServer(sqlOffsetNum, sqlLimitNum) {
     $.ajax(ajaxConfig);
 }
 
-function handleServerDataToDOM (list) {
+function handleServerDataToDOM(list) {
     let triggerAverage = 0;
     for (let listCount = 0; listCount < list.length; listCount++) {
         student_array.push(list[listCount]);
-        if (listCount === list.length-1) {
+        if (listCount === list.length - 1) {
             triggerAverage = 1;
         }
         updateStudentList(list[listCount], triggerAverage);
@@ -415,7 +423,7 @@ function handleServerDataToDOM (list) {
 
 function fetchNumberOfStudentsAndPages() {
     var ajaxConfig = {
-        data: {action:'pagination'},
+        data: { action: 'pagination' },
         dataType: 'json',
         method: 'POST',
         url: 'data.php',
@@ -433,7 +441,7 @@ function fetchNumberOfStudentsAndPages() {
 
 function firstPageButtonFunction() {
     clearStudentList();
-    getFromServer(0,10);
+    getFromServer(0, 10);
     $('.page-item').removeClass('active');
     $('.navPageOne').text(1).parent().addClass('active');
     $('.navPageTwo').text(2);
@@ -444,13 +452,13 @@ function firstPageButtonFunction() {
 
 function lastPageButtonFunction() {
     clearStudentList();
-    const lastPageNum = (pageNum*10)-10;
-    getFromServer(lastPageNum,10);
+    const lastPageNum = (pageNum * 10) - 10;
+    getFromServer(lastPageNum, 10);
     $('.page-item').removeClass('active');
-    $('.navPageOne').text(pageNum-4);
-    $('.navPageTwo').text(pageNum-3);
-    $('.navPageThree').text(pageNum-2);
-    $('.navPageFour').text(pageNum-1);
+    $('.navPageOne').text(pageNum - 4);
+    $('.navPageTwo').text(pageNum - 3);
+    $('.navPageThree').text(pageNum - 2);
+    $('.navPageFour').text(pageNum - 1);
     $('.navPageFive').text(pageNum).parent().addClass('active');
 };
 
@@ -462,19 +470,19 @@ function navPageButtonFunction() {
 function navPageFunction(selectedPageNum) {
     $('.page-item').removeClass('active');
     clearStudentList();
-    getFromServer((selectedPageNum*10)-10,10);
+    getFromServer((selectedPageNum * 10) - 10, 10);
     if (selectedPageNum < 4) {
         let navPageUp = 1;
-        $('.navPage').each(function() {
+        $('.navPage').each(function () {
             this.text = navPageUp;
             if (parseInt(this.text) === selectedPageNum) {
                 this.parentElement.className += " active";
             };
             navPageUp++;
         });
-    } else if (selectedPageNum > pageNum-3 && selectedPageNum <= pageNum) {
+    } else if (selectedPageNum > pageNum - 3 && selectedPageNum <= pageNum) {
         let navPageDown = 4;
-        $('.navPage').each(function() {
+        $('.navPage').each(function () {
             this.text = pageNum - navPageDown;
             if (parseInt(this.text) === selectedPageNum) {
                 this.parentElement.className += " active";
@@ -482,11 +490,11 @@ function navPageFunction(selectedPageNum) {
             navPageDown--;
         });
     } else {
-        $('.navPageOne').text(selectedPageNum-2);
-        $('.navPageTwo').text(selectedPageNum-1);
+        $('.navPageOne').text(selectedPageNum - 2);
+        $('.navPageTwo').text(selectedPageNum - 1);
         $('.navPageThree').text(selectedPageNum).parent().addClass('active');
-        $('.navPageFour').text(selectedPageNum+1);
-        $('.navPageFive').text(selectedPageNum+2);
+        $('.navPageFour').text(selectedPageNum + 1);
+        $('.navPageFive').text(selectedPageNum + 2);
     }
 };
 
@@ -496,7 +504,7 @@ function goToPagePlaceholder(num) {
 
 function gotoPage() {
     const inputNum = parseInt($('.goToPage').val());
-    if (inputNum<1 || inputNum > pageNum || isNaN(inputNum)) {
+    if (inputNum < 1 || inputNum > pageNum || isNaN(inputNum)) {
         $('.goToPage').addClass('is-invalid');
         $('.goToPage').val("");
         return;
