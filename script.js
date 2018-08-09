@@ -77,7 +77,7 @@ function addStudent() {
         success: function (response) {
             if (response.success) {
                 student_array[student_array.length - 1].id = response.insertID;
-                updateStudentList(student_array[student_array.length - 1]);
+                updateStudentList(student_array[student_array.length - 1], 1);
                 addStudentLastPage();
             } else {
                 displayErrorModal(response.errors[0]);
@@ -186,7 +186,53 @@ function renderStudentOnDom(studentObj) {
             }
         },
     });
-
+    let dropDownContainer = $('<div>',{
+        class: 'dropdown d-table-cell d-sm-none pt-2'
+    });
+    let dropDownToggle = $('<button>',{
+        class: 'btn btn-secondary dropdown-toggle',
+        type: 'button',
+        id: 'dropdownMenu',
+        'data-toggle': 'dropdown',
+        'aria-haspopup': 'true',
+        'aria-expanded': 'false',
+        text: 'Tools'
+    });
+    let dropdownMenu = $('<div>', {
+        class: 'dropdown-menu dropdown-menu-right',
+        'aria-labelledby': 'dropdownMenu'
+    });
+    let dropdownUpdateBtn = $('<button>',{
+        class: 'dropdown-item dropdownUpdate',
+        type: 'button',
+        text: 'Update',
+        on: {
+            click: function () {
+                $("#updateStudentName, #updateCourse, #updateStudentGrade").removeClass("is-invalid");
+                $("#updateModal").modal();
+                selectedStudentID = parseInt($(this).closest('tr').attr('id'));
+                let studentIndex = student_array.indexOf(studentObj);
+                $('.update-modal-title').text("Updating " + student_array[studentIndex].name + "'s Entry");
+                $('#updateStudentName').val(student_array[studentIndex].name);
+                $("#updateCourse").val(student_array[studentIndex].course_name);
+                $("#updateStudentGrade").val(student_array[studentIndex].grade);
+            }
+        },
+    });
+    let dropdownDeleteBtn = $('<button>',{
+        class: 'dropdown-item dropdownDelete',
+        type: 'button',
+        text: 'Delete',
+        on: {
+            click: function() {
+                const deleteStudentID = parseInt($(this).closest('tr').attr('id'));
+                const deleteStudentIndex = student_array.indexOf(studentObj);
+                mobileConfirmDeleteFunction(deleteStudentID, deleteStudentIndex);
+            }
+        }
+    });
+    $(dropdownMenu).append(dropdownUpdateBtn,dropdownDeleteBtn);
+    $(dropDownContainer).append(dropDownToggle,dropdownMenu);
     $(updateButtonContainer).append(updateButton);
     $(deleteButtonContainer).append(deleteButton);
     $(confirmDeleteContainer).append(confirmDeleteButton, cancelConfirmButton);
@@ -194,13 +240,15 @@ function renderStudentOnDom(studentObj) {
     var studentListContainer = $('<tr>', {
         id: studentObj.id
     });
-    studentListContainer.append(studentName, studentCourse, studentGrade, updateButtonContainer, deleteButtonContainer, confirmDeleteContainer);
+    studentListContainer.append(studentName, studentCourse, studentGrade, updateButtonContainer, deleteButtonContainer, confirmDeleteContainer, dropDownContainer);
     $('tbody').append(studentListContainer);
 }
 
-function updateStudentList(student) {
+function updateStudentList(student, triggerAverage) {
     renderStudentOnDom(student);
-    calculateGradeAverage();
+    if (triggerAverage === 1) {
+        calculateGradeAverage();
+    }
 }
 
 function deleteStudentFromServer(studentID, studentIndex) {
@@ -241,6 +289,14 @@ function deletedStudentSuccess() {
         getFromServer(offsetNum,10);
         calculateGradeAverage();
     };
+};
+
+function mobileConfirmDeleteFunction(id, index) {
+    $("#confirmDeleteMobileModal").modal();
+    $('.confirmDeleteMobileMessage').text("Are you sure you want to delete " + student_array[index].name + "'s entry?");
+    $('.mobileConfirmDelete').one('click', function() {
+        deleteStudentFromServer(id, index);
+    });
 };
 
 function updateStudentServer() {
@@ -347,9 +403,13 @@ function getFromServer(sqlOffsetNum, sqlLimitNum) {
 }
 
 function handleServerDataToDOM (list) {
-    for (var listCount = 0; listCount < list.length; listCount++) {
+    let triggerAverage = 0;
+    for (let listCount = 0; listCount < list.length; listCount++) {
         student_array.push(list[listCount]);
-        updateStudentList(list[listCount]);
+        if (listCount === list.length-1) {
+            triggerAverage = 1;
+        }
+        updateStudentList(list[listCount], triggerAverage);
     };
 };
 
