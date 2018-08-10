@@ -3,6 +3,7 @@ $(document).ready(initializeApp);
 var student_array = [];
 var selectedStudentID = null;
 var pageNum = 0;
+var totalNumStudents = 0;
 
 function initializeApp() {
     addClickHandlersToElements();
@@ -88,13 +89,21 @@ function addStudent() {
 }
 
 function addStudentLastPage() {
+    totalNumStudents++;
     const currentPageNum = getCurrentPageNum();
     if (student_array.length > 10 && currentPageNum === pageNum) {
         pageNum++;
         lastPageButtonFunction();
         goToPagePlaceholder(pageNum);
-    } else {
-        lastPageButtonFunction();
+    } else if (student_array.length > 10 && currentPageNum !== pageNum){
+        const numStudentsArray = Array.from(totalNumStudents.toString());
+        if (numStudentsArray[numStudentsArray.length-1] === "1") {
+            pageNum++;
+            lastPageButtonFunction();
+            goToPagePlaceholder(pageNum);
+        } else {
+            lastPageButtonFunction();
+        }
     };
 };
 
@@ -284,17 +293,21 @@ function deleteStudentFromServer(studentID, studentIndex) {
 }
 
 function deletedStudentSuccess() {
-    if (student_array.length === 0) {
+    totalNumStudents--;
+    const currentPageNum = getCurrentPageNum();
+    if (student_array.length === 0 && pageNum === currentPageNum) {
         pageNum--;
         lastPageButtonFunction();
         calculateGradeAverage();
         goToPagePlaceholder(pageNum);
         return;
-    } else {
-        const currentPageNum = getCurrentPageNum();
-        clearStudentList();
-        const offsetNum = (currentPageNum * 10) - 10;
-        getFromServer(offsetNum, 10);
+    } else if (pageNum !== currentPageNum) {
+        const numStudentsArray = Array.from(totalNumStudents.toString());
+        if (numStudentsArray[numStudentsArray.length-1] === "0") {
+            pageNum--;
+            goToPagePlaceholder(pageNum);
+        }
+        navPageFunction(currentPageNum);
         calculateGradeAverage();
     };
 };
@@ -429,6 +442,7 @@ function fetchNumberOfStudentsAndPages() {
         url: 'data.php',
         success: function (response) {
             if (response.success) {
+                totalNumStudents = parseInt(response.data[0]);
                 pageNum = response.data[1];
                 goToPagePlaceholder(pageNum);
             } else {
@@ -440,6 +454,7 @@ function fetchNumberOfStudentsAndPages() {
 }
 
 function firstPageButtonFunction() {
+    $('.goToPage').val("");
     clearStudentList();
     getFromServer(0, 10);
     $('.page-item').removeClass('active');
@@ -451,6 +466,7 @@ function firstPageButtonFunction() {
 };
 
 function lastPageButtonFunction() {
+    $('.goToPage').val("");
     clearStudentList();
     const lastPageNum = (pageNum * 10) - 10;
     getFromServer(lastPageNum, 10);
@@ -463,6 +479,7 @@ function lastPageButtonFunction() {
 };
 
 function navPageButtonFunction() {
+    $('.goToPage').val("");
     const selectedPageBtnNum = parseInt($(this).text());
     navPageFunction(selectedPageBtnNum);
 };
