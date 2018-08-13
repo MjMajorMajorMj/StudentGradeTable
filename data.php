@@ -1,5 +1,4 @@
 <?php
-
 define('fromData',true);
 
 if(empty($_POST['action'])){
@@ -30,6 +29,9 @@ switch($_POST['action']){
 		break;
 	case 'pagination':
 		include 'dataApi/pagination.php';
+		break;
+	case 'search':
+		include 'dataApi/search.php';
 		break;
 };
 
