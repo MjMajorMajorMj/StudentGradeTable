@@ -25,6 +25,9 @@
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
+                    <div class="invalid-feedback">
+                        <h6>Please search for valid terms.</h6>
+                    </div>
                 </div>
                 <small class="text-right order-2 float-right">Grade Average:
                     <span class="avgGrade badge badge-secondary">0</span>
@@ -37,9 +40,14 @@
             </h3>
         </div>
         <div class="input-group col-12 col-sm-12 col-md-12 d-lg-none d-xl-none mt-1">
-            <input type="text" class="form-control searchBar" placeholder="Search" aria-label="searchBar" aria-describedby="basic-addon2">
+            <input type="text" class="form-control mobileSearchBar" placeholder="Search" aria-label="searchBar" aria-describedby="basic-addon2">
             <div class="input-group-append">
-                <button class="btn btn-outline-success searchBarBtn" type="button">Enter</button>
+                <button class="btn btn-outline-success mobileSearchBtn" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="invalid-feedback">
+                <h6>Please search for valid terms.</h6>
             </div>
         </div>
         <div class="student-add-form col-lg-2 col-12 float-lg-right form-group">

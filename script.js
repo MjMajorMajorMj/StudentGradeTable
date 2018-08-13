@@ -8,6 +8,7 @@ var totalNumStudents = 0;
 function initializeApp() {
     addClickHandlersToElements();
     addClickHandlersToPagination();
+    addClickHandlersToSearch();
     handleGetDataClick();
     fetchNumberOfStudentsAndPages();
 }
@@ -20,13 +21,18 @@ function addClickHandlersToElements() {
     $('.btnCancelUpdate').on('click', function () {
         $("#updateStudentName, #updateCourse, #updateStudentGrade").removeClass("is-invalid");
     });
-    $('.goToPageBtn').on('click', gotoPage);
 };
 
 function addClickHandlersToPagination() {
     $('.firstPage').on('click', firstPageButtonFunction);
     $('.lastPage').on('click', lastPageButtonFunction);
-    $('.navPage').on('click', navPageButtonFunction);
+    $('.navPage').on('click', navPageButtonFunction)
+    $('.goToPageBtn').on('click', gotoPage);
+};
+
+function addClickHandlersToSearch() {
+    $('.searchBarBtn').on('click', searchFunction);
+    $('.mobileSearchBtn').on('click', mobileSearchFunction);
 };
 
 function handleAddClicked() {
@@ -529,6 +535,64 @@ function gotoPage() {
     $('.goToPage').val("");
     $('.goToPage').removeClass('is-invalid');
     navPageFunction(inputNum);
+}
+
+function searchFunction() {
+    const searchInput = $('.searchBar').val();
+    if (searchInput === "") {
+        $('.searchBar').addClass('is-invalid');
+        return;
+    } else {
+        $('.searchBar').removeClass('is-invalid');
+        $('.searchBar').val("");
+    };
+    searchFromServer(searchInput);
+}
+
+function mobileSearchFunction() {
+    const searchInput = $('.mobileSearchBar').val();
+    if (searchInput === "") {
+        $('.mobileSearchBar').addClass('is-invalid');
+        return;
+    } else {
+        $('.mobileSearchBar').removeClass('is-invalid');
+        $('.mobileSearchBar').val("");
+    };
+    searchFromServer(searchInput);
+}
+
+function searchFromServer(searchInput) {
+    var ajaxConfig = {
+        data: { action: 'search', search: searchInput },
+        dataType: 'json',
+        method: 'POST',
+        url: 'data.php',
+        success: function (response) {
+            if (response.success) {
+                displaySearchResults(response.data);
+            } else {
+                if (response.errors[0] === "no search data") {
+                    displayNoResults();
+                } else {
+                    displayErrorModal(response.errors[0]);
+                };
+            };
+        }
+    };
+    $.ajax(ajaxConfig);
+};
+
+function displaySearchResults(list) {
+    clearStudentList();
+    for (let listCount = 0; listCount < list.length; listCount++) {
+        student_array.push(list[listCount]);
+        updateStudentList(list[listCount], 0);
+    };
+};
+
+function displayNoResults() {
+    clearStudentList();
+    
 }
 
 function displayErrorModal(error) {
