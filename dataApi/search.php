@@ -8,6 +8,8 @@ for ($i=0; $i < count($searchArray); ++$i) {
     $queryString .= " `name` LIKE '%$searchArray[$i]%' OR `course_name` LIKE '%$searchArray[$i]%'";
     if ($i !== count($searchArray)-1) {
         $queryString .= " OR";
+    } else if ($i === count($searchArray)-1) {
+        $queryString .= " LIMIT 10";
     };
 };
 
