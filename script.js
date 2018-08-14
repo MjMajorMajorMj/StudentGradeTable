@@ -99,12 +99,14 @@ function addStudentLastPage() {
     const currentPageNum = getCurrentPageNum();
     if (student_array.length > 10 && currentPageNum === pageNum) {
         pageNum++;
+        checkPageNum();
         lastPageButtonFunction();
         goToPagePlaceholder(pageNum);
-    } else if (student_array.length > 10 && currentPageNum !== pageNum){
+    } else if (student_array.length > 10 && currentPageNum !== pageNum) {
         const numStudentsArray = Array.from(totalNumStudents.toString());
-        if (numStudentsArray[numStudentsArray.length-1] === "1") {
+        if (numStudentsArray[numStudentsArray.length - 1] === "1") {
             pageNum++;
+            checkPageNum();
             lastPageButtonFunction();
             goToPagePlaceholder(pageNum);
         } else {
@@ -303,14 +305,16 @@ function deletedStudentSuccess() {
     const currentPageNum = getCurrentPageNum();
     if (student_array.length === 0 && pageNum === currentPageNum) {
         pageNum--;
-        lastPageButtonFunction();
+        checkPageNum();
+        navPageFunction(pageNum);
         calculateGradeAverage();
         goToPagePlaceholder(pageNum);
         return;
     } else if (pageNum !== currentPageNum) {
         const numStudentsArray = Array.from(totalNumStudents.toString());
-        if (numStudentsArray[numStudentsArray.length-1] === "0") {
+        if (numStudentsArray[numStudentsArray.length - 1] === "0") {
             pageNum--;
+            checkPageNum();
             goToPagePlaceholder(pageNum);
         }
         navPageFunction(currentPageNum);
@@ -399,7 +403,7 @@ function removeStudent(studentNum) {
 }
 
 function handleGetDataClick() {
-    $('.mobileSearchBar, .searchBar').removeClass('is-invalid, is-valid');
+    $('.mobileSearchBar, .searchBar').removeClass('is-invalid is-valid');
     clearStudentList();
     const currentPageNum = getCurrentPageNum();
     const offsetNum = (currentPageNum * 10) - 10;
@@ -451,6 +455,7 @@ function fetchNumberOfStudentsAndPages() {
             if (response.success) {
                 totalNumStudents = parseInt(response.data[0]);
                 pageNum = response.data[1];
+                checkPageNum();
                 goToPagePlaceholder(pageNum);
             } else {
                 displayErrorModal(response.errors[0]);
@@ -506,6 +511,15 @@ function navPageFunction(selectedPageNum) {
         });
     } else if (selectedPageNum > pageNum - 3 && selectedPageNum <= pageNum) {
         let navPageDown = 4;
+        if (pageNum === 4) {
+            navPageDown--;
+        } else if (pageNum === 3) {
+            navPageDown-2;
+        } else if (pageNum === 2) {
+            navPageDown-3;
+        } else if (pageNum === 1) {
+            navPageDown-4;
+        };
         $('.navPage').each(function () {
             this.text = pageNum - navPageDown;
             if (parseInt(this.text) === selectedPageNum) {
@@ -538,11 +552,33 @@ function gotoPage() {
     navPageFunction(inputNum);
 }
 
+function checkPageNum() {
+    if (pageNum < 5) {
+        $('.firstPage, .lastPage').hide();
+        switch (pageNum) {
+            case 1:
+                $('.navPageFive, .navPageFour, .navPageThree, .navPageTwo').hide();
+                break;
+            case 2:
+                $('.navPageFive, .navPageFour, .navPageThree').hide();
+                break;
+            case 3:
+                $('.navPageFive, .navPageFour').hide();
+                break;
+            case 4:
+                $('.navPageFive').hide();
+                break;
+        }
+    } else {
+        $('.firstPage, .lastPage, .navPage').show();
+    };
+}
+
 function searchFunction() {
-    $('.mobileSearchBar, .searchBar').removeClass('is-invalid, is-valid');
+    $('.mobileSearchBar, .searchBar').removeClass('is-invalid is-valid');
     const searchString = $('.searchBar').val();
     if (searchString === "") {
-        $('.mobileSearchFailMsg, searchFailMsg').text('Please search for valid terms.');
+        $('.mobileSearchFailMsg, .searchFailMsg').text('Please search for valid terms.');
         $('.searchBar').addClass('is-invalid');
         return;
     } else {
@@ -554,10 +590,10 @@ function searchFunction() {
 };
 
 function mobileSearchFunction() {
-    $('.mobileSearchBar, .searchBar').removeClass('is-invalid, is-valid');
+    $('.mobileSearchBar, .searchBar').removeClass('is-invalid is-valid');
     const searchString = $('.mobileSearchBar').val();
     if (searchString === "") {
-        $('.mobileSearchFailMsg, searchFailMsg').text('Please search for valid terms.');
+        $('.mobileSearchFailMsg, .searchFailMsg').text('Please search for valid terms.');
         $('.mobileSearchBar').addClass('is-invalid');
         return;
     } else {
@@ -603,7 +639,7 @@ function displayNoResults() {
     clearStudentList();
     $('.mobileSearchBar, .searchBar').addClass('is-invalid');
     $('.mobileSearchFailMsg, .searchFailMsg').text('Zero results found.');
-}
+};
 
 function displayErrorModal(error) {
     let errorText = "";
