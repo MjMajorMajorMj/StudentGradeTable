@@ -1,8 +1,17 @@
 <?php
 $result = null;
-$searchInput = htmlspecialchars($_POST['search']);
+$searchArray = $_POST['search'];
 
-$query = "SELECT * FROM `student_data` WHERE `name` LIKE '%$searchInput%' OR `course_name` LIKE '%$searchInput%'";
+$queryString = "SELECT * FROM `student_data` WHERE";
+
+for ($i=0; $i < count($searchArray); ++$i) {
+    $queryString .= " `name` LIKE '%$searchArray[$i]%' OR `course_name` LIKE '%$searchArray[$i]%'";
+    if ($i !== count($searchArray)-1) {
+        $queryString .= " OR";
+    };
+};
+
+$query = $queryString;
 $result = mysqli_query($conn, $query);
 
 if (empty($result)) {
@@ -14,6 +23,7 @@ if (empty($result)) {
         while( $row = mysqli_fetch_assoc($result)){
             $output['data'][] = $row;
         };
+        $output['searchCount'] = count($output['data']);
     } else {
         $output['errors'][] = 'no search data';
     };

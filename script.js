@@ -399,6 +399,7 @@ function removeStudent(studentNum) {
 }
 
 function handleGetDataClick() {
+    $('.mobileSearchBar, .searchBar').removeClass('is-invalid, is-valid');
     clearStudentList();
     const currentPageNum = getCurrentPageNum();
     const offsetNum = (currentPageNum * 10) - 10;
@@ -538,28 +539,34 @@ function gotoPage() {
 }
 
 function searchFunction() {
-    const searchInput = $('.searchBar').val();
-    if (searchInput === "") {
+    $('.mobileSearchBar, .searchBar').removeClass('is-invalid, is-valid');
+    const searchString = $('.searchBar').val();
+    if (searchString === "") {
+        $('.mobileSearchFailMsg, searchFailMsg').text('Please search for valid terms.');
         $('.searchBar').addClass('is-invalid');
         return;
     } else {
         $('.searchBar').removeClass('is-invalid');
         $('.searchBar').val("");
     };
+    const searchInput = searchString.split(" ");
     searchFromServer(searchInput);
-}
+};
 
 function mobileSearchFunction() {
-    const searchInput = $('.mobileSearchBar').val();
-    if (searchInput === "") {
+    $('.mobileSearchBar, .searchBar').removeClass('is-invalid, is-valid');
+    const searchString = $('.mobileSearchBar').val();
+    if (searchString === "") {
+        $('.mobileSearchFailMsg, searchFailMsg').text('Please search for valid terms.');
         $('.mobileSearchBar').addClass('is-invalid');
         return;
     } else {
         $('.mobileSearchBar').removeClass('is-invalid');
         $('.mobileSearchBar').val("");
     };
+    const searchInput = searchString.split(" ");
     searchFromServer(searchInput);
-}
+};
 
 function searchFromServer(searchInput) {
     var ajaxConfig = {
@@ -569,6 +576,8 @@ function searchFromServer(searchInput) {
         url: 'data.php',
         success: function (response) {
             if (response.success) {
+                $('.mobileSearchBar, .searchBar').addClass('is-valid');
+                $('.mobileSearchSuccessMsg, .searchSuccessMsg').text("Found " + response.searchCount + " results.");
                 displaySearchResults(response.data);
             } else {
                 if (response.errors[0] === "no search data") {
@@ -592,7 +601,8 @@ function displaySearchResults(list) {
 
 function displayNoResults() {
     clearStudentList();
-    
+    $('.mobileSearchBar, .searchBar').addClass('is-invalid');
+    $('.mobileSearchFailMsg, .searchFailMsg').text('Zero results found.');
 }
 
 function displayErrorModal(error) {
