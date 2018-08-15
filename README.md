@@ -18,9 +18,13 @@ You may test it on [the live demo].
 
 ## Personal Insight
 > The Student Grade Table is a personal achievement of mine because it my first major solo project. I worked on two other web applications ([Peaky Finder] and [Food Nation]) but those are group projects.
+
 > In the beginning, the Student Grade Table was a project to understand API interaction. Soon after, I've learned to migrate from the external API and database to create my own.
+
 > More features were soon added. As the database started to scale from a handful of students to about one thousand, the issue regarding browser performance arised, and from that issue came the pagination feature.
+
 > One other lesson I learned is when developing web applications, one must account for the small (but important) details. For example, in the early versions of this app, clicking on the delete button would simply delete the student. Now, doing so would display two buttons (or a modal on the mobile version), asking the user whether to confirm the deletion. This feature is a safeguard against accidental deletions caused by the user.
+
 > All in all, the Student Grade Table didn't just force me to develop better programming skills but also better habits and considerations regarding web development. As I continue to work on this web application, my skills and habits will continue to grow.
 
 ## Contributions
