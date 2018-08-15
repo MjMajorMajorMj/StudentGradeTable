@@ -11,7 +11,8 @@ if (empty($result)) {
 } else {
 	if (mysqli_num_rows($result) > 0 ) {
 		$output['success'] = true;
-		$output['data']=[];
+        $output['data']=[];
+        $rowNum = 0;
         while( $row = mysqli_fetch_assoc($result)){
             $output['data'][] = $row;
         };
