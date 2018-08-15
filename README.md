@@ -31,7 +31,7 @@ You may test it on [the live demo].
 If you want to contribute, great! Shoot me a message towards [my email] or [my portfolio] and we'll working something out. I'd perfer short but concise commits (easier to track in my opinion).
 
    [the live demo]: <https://sgt.aaroncpark.com/>
-   [Peaky Finder]: <peakyfinder.com>
+   [Peaky Finder]: <http://peakyfinder.com>
    [Food Nation]: #
-   [my email]: <aaroncpark@protonmail.com>
+   [my email]: <http://aaroncpark@protonmail.com>
    [my portfolio]: <https://aaroncpark.com/>
