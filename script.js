@@ -579,11 +579,11 @@ function searchFunction() {
     const searchString = $('.searchBar').val();
     if (searchString === "") {
         $('.mobileSearchFailMsg, .searchFailMsg').text('Please search for valid terms.');
-        $('.searchBar').addClass('is-invalid');
+        $('.searchBar, .mobileSearchBar').addClass('is-invalid');
         return;
     } else {
-        $('.searchBar').removeClass('is-invalid');
-        $('.searchBar').val("");
+        $('.searchBar, .mobileSearchBar').removeClass('is-invalid');
+        $('.searchBar, .mobileSearchBar').val("");
     };
     const searchInput = searchString.split(" ");
     searchFromServer(searchInput);
@@ -593,12 +593,11 @@ function mobileSearchFunction() {
     $('.mobileSearchBar, .searchBar').removeClass('is-invalid is-valid');
     const searchString = $('.mobileSearchBar').val();
     if (searchString === "") {
-        $('.mobileSearchFailMsg, .searchFailMsg').text('Please search for valid terms.');
-        $('.mobileSearchBar').addClass('is-invalid');
+        $('.searchBar, .mobileSearchBar').addClass('is-invalid');
         return;
     } else {
-        $('.mobileSearchBar').removeClass('is-invalid');
-        $('.mobileSearchBar').val("");
+        $('.searchBar, .mobileSearchBar').removeClass('is-invalid');
+        $('.searchBar, .mobileSearchBar').val("");
     };
     const searchInput = searchString.split(" ");
     searchFromServer(searchInput);
