@@ -6,6 +6,7 @@
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
         crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
@@ -37,7 +38,7 @@
                 </small>
             </h1>
             <h3 class="d-block d-sm-none order-1">Student Grade Table
-                <small class="text-nowrap order-2" style="display: inline-block">Grade Average:
+                <small class="text-nowrap order-2 mobileGradeAvg">Grade Average:
                     <span class="avgGrade badge badge-secondary">0</span>
                 </small>
             </h3>
@@ -95,14 +96,14 @@
             <button type="button" class="btn btn-secondary btnCancel mb-1" onclick="">Cancel</button>
             <button type="button" class="btn btn-primary btnGetData mb-1" onclick="">Refresh</button>
         </div>
-        <div class="student-list-container col-lg-10 col-12" style="padding-left:0">
-            <table class="student-list table" style="table-layout:fixed">
+        <div class="student-list-container col-lg-10 col-12">
+            <table class="student-list table">
                 <thead>
                     <tr>
-                        <th style="width: 25%">Student Name</th>
-                        <th style="width: 25%">Student Course</th>
-                        <th style="width: 25%">Student Grade</th>
-                        <th style="width: 15%">Tools</th>
+                        <th>Student Name</th>
+                        <th>Student Course</th>
+                        <th>Student Grade</th>
+                        <th id="toolsTH">Tools</th>
                     </tr>
                 </thead>
                 <tbody class="studentTBody">
@@ -149,6 +150,10 @@
         </div>
     </div>
 
+    <div class="alert alert-success fade show fixed-top" role="alert">
+        <p class="alertMsg"></p>
+    </div>
+
     <div class="modal fade" tabindex="-1" role="dialog" id="errorModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -172,7 +177,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title update-modal-title" style="overflow-wrap: break-word; width: 90%">Update Student</h5>
+                    <h5 class="modal-title update-modal-title">Update Student</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -233,7 +238,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class='confirmDeleteMobileMessage' style="overflow-wrap: break-word"></p>
+                    <p class='confirmDeleteMobileMessage'></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger mobileConfirmDelete" data-dismiss="modal">Yes</button>
