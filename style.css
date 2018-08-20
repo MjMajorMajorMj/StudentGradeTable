@@ -1,0 +1,45 @@
+.mobileGradeAvg {
+    display:inline-block;
+}
+
+.student-list-container {
+    padding-left:0;
+}
+
+.student-list {
+    table-layout:fixed;
+}
+
+th {
+    width: 25%
+}
+
+#toolsTH {
+    width: 15%;
+}
+
+.update-modal-title {
+    overflow-wrap: break-word;
+    width: 90%;
+}
+
+.confirmDeleteMobileMessage {
+    overflow-wrap: break-word
+}
+
+.alert {
+    width: 35%;
+    margin: 0 auto;
+    display: none;
+}
+
+.alertMsg {
+    margin: 0 auto;
+    text-align:center;
+}
+
+@media screen and (max-width: 500px) {
+    .alert {
+        width: 100%;
+    }
+}

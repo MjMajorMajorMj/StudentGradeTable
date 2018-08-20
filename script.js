@@ -86,6 +86,7 @@ function addStudent() {
                 student_array[student_array.length - 1].id = response.insertID;
                 updateStudentList(student_array[student_array.length - 1], 1);
                 addStudentLastPage();
+                displayAlert("add");
             } else {
                 displayErrorModal(response.errors[0]);
             }
@@ -301,6 +302,7 @@ function deleteStudentFromServer(studentID, studentIndex) {
 }
 
 function deletedStudentSuccess() {
+    displayAlert("delete");
     totalNumStudents--;
     const currentPageNum = getCurrentPageNum();
     if (student_array.length === 0 && pageNum === currentPageNum) {
@@ -366,7 +368,7 @@ function updateStudentServer() {
                 $('#updateModal').modal('toggle');
                 $("#updateStudentName, #updateCourse, #updateStudentGrade").val("");
                 calculateGradeAverage();
-                $('.alert').alert();
+                displayAlert("update");
             } else {
                 displayErrorModal(response.errors[0]);
             }
@@ -639,6 +641,28 @@ function displayNoResults() {
     $('.mobileSearchBar, .searchBar').addClass('is-invalid');
     $('.mobileSearchFailMsg, .searchFailMsg').text('Zero results found.');
 };
+
+function displayAlert(alertType) {
+    let alertMsg = "";
+    switch (alertType) {
+        case 'add':
+            alertMsg = "Student successfully added";
+            break;
+        case 'delete':
+            alertMsg = "Student successfully deleted";
+            break;
+        case 'update':
+            alertMsg = "Student successfully updated";
+            break;
+        default:
+            alertMsg = "Error";
+            break;
+    }
+    $('.alertMsg').text(alertMsg);
+    $(".alert").fadeTo(2000, 500).slideUp(500, function(){
+        $(".alert").slideUp(500);
+    });
+}
 
 function displayErrorModal(error) {
     let errorText = "";
