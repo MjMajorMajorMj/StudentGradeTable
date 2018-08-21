@@ -32,6 +32,6 @@ If you want to contribute, great! Shoot me a message towards [my email] or [my p
 
    [the live demo]: <https://sgt.aaroncpark.com/>
    [Peaky Finder]: <http://peakyfinder.com>
-   [Food Nation]: #
+   [Food Nation]: <http://http://foodnation.aaroncpark.com/>
    [my email]: <http://aaroncpark@protonmail.com>
    [my portfolio]: <https://aaroncpark.com/>
