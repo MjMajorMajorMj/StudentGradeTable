@@ -11,6 +11,7 @@ function initializeApp() {
     addClickHandlersToSearch();
     handleGetDataClick();
     fetchNumberOfStudentsAndPages();
+    addKeyDownToForms();
 }
 
 function addClickHandlersToElements() {
@@ -34,6 +35,39 @@ function addClickHandlersToSearch() {
     $('.searchBarBtn').on('click', searchFunction);
     $('.mobileSearchBtn').on('click', mobileSearchFunction);
 };
+
+function addKeyDownToForms() {
+    $('.searchBar').keypress(function(key) {
+        if (key.which === 13) {
+            searchFunction();
+        };
+    });
+    $('.mobileSearchBar').keypress(function(key) {
+        if (key.which === 13) {
+            mobileSearchFunction()
+        };
+    });
+    $('#studentName, #course, #studentGrade').keypress(function(key) {
+        if (key.which === 13) {
+            addStudent();
+        };
+    });
+    $('#studentName, #course, #studentGrade').keypress(function(key) {
+        if (key.which === 13) {
+            addStudent();
+        };
+    });
+    $('#updateStudentName, #updateCourse, #updateStudentGrade').keypress(function(key) {
+        if (key.which === 13) {
+            updateStudentServer();
+        };
+    });
+    $('.goToPage').keypress(function(key) {
+        if (key.which === 13) {
+            gotoPage();
+        };
+    });
+}
 
 function handleAddClicked() {
     addStudent();
