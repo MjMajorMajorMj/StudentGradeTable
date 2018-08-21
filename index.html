@@ -1,125 +1,253 @@
 <!doctype html>
 <html>
+
 <head>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="script.js"></script>
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
 </head>
+
 <body>
-<div class="col-sm-12">
     <div class="col-sm-12">
-        <!-- only show this element when the isnt on mobile -->
-        <h1 class="hidden-xs">Student Grade Table
-            <small class="text-right pull-right">Grade Average : <span class="avgGrade label label-default">0</span></small>
-        </h1>
-        <!-- only show this element when the user gets to a mobile version -->
-        <h3 class="visible-xs">Student Grade Table
-            <small class="text-nowrap pull-right">Grade Average : <span class="avgGrade label label-default">0</span></small>
-        </h3>
-    </div>
-    <div class="student-add-form col-sm-2 col-xs-12 col-sm-push-10 form-group">
-        <h4>Add Student</h4>
-        <div class="input-group form-group">
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-user"></span>
-            </span>
-            <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name">
+        <div class="col-sm-12">
+            <h1 class="d-none d-sm-block order-1">Student Grade Table
+                <div class="input-group col-xl-5 d-xl-inline-flex col-lg-3 d-lg-inline-flex d-none">
+                    <input type="text" class="form-control searchBar" placeholder="Search" aria-label="searchBar" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success searchBarBtn" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback">
+                        <h6 class="searchFailMsg">Please search for valid terms.</h6>
+                    </div>
+                    <div class="valid-feedback">
+                        <h6 class="searchSuccessMsg"></h6>
+                    </div>
+                </div>
+                <small class="text-right order-2 float-right">Grade Average:
+                    <span class="avgGrade badge badge-secondary">0</span>
+                </small>
+            </h1>
+            <h3 class="d-block d-sm-none order-1">Student Grade Table
+                <small class="text-nowrap order-2 mobileGradeAvg">Grade Average:
+                    <span class="avgGrade badge badge-secondary">0</span>
+                </small>
+            </h3>
         </div>
-        <div class="input-group form-group">
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-list-alt"></span>
-            </span>
-            <input type="text" class="form-control" name="course" id="course"
-                   placeholder="Student Course">
+        <div class="input-group col-12 col-sm-12 col-md-12 d-lg-none d-xl-none mt-1">
+            <input type="text" class="form-control mobileSearchBar" placeholder="Search" aria-label="searchBar" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-success mobileSearchBtn" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="invalid-feedback">
+                <h6 class="mobileSearchFailMsg">Please search for valid terms.</h6>
+            </div>
+            <div class="valid-feedback">
+                <h6 class="mobileSearchSuccessMsg"></h6>
+            </div>
         </div>
-        <div class="input-group form-group">
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-education"></span>
-            </span>
-            <input type="text" class="form-control" name="studentGrade" id="studentGrade"
-                   placeholder="Student Grade">
+        <div class="student-add-form col-lg-2 col-12 float-lg-right form-group">
+            <h4>Add Student</h4>
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="fas fa-user-graduate"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Name">
+                <div class="invalid-feedback">
+                    Please input a valid name.
+                </div>
+            </div>
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="fas fa-book"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control" name="course" id="course" placeholder="Course">
+                <div class="invalid-feedback">
+                    Please input a valid course.
+                </div>
+            </div>
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="fas fa-pencil-ruler"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control" name="studentGrade" id="studentGrade" placeholder="Grade">
+                <div class="invalid-feedback">
+                    Please input a valid grade.
+                </div>
+            </div>
+            <button type="button" class="btn btn-success btnAdd mb-1" onclick="">Add</button>
+            <button type="button" class="btn btn-secondary btnCancel mb-1" onclick="">Cancel</button>
+            <button type="button" class="btn btn-primary btnGetData mb-1" onclick="">Refresh</button>
         </div>
-        <button type="button" class="btn btn-success btnAdd" onclick="">Add</button>
-        <button type="button" class="btn btn-default btnCancel" onclick="">Cancel</button>
-        <button type="button" class="btn btn-primary btnGetData" onclick="">Get Data From Server</button>
-    </div>
-    <div class="student-list-container col-sm-10 col-xs-12 col-sm-pull-2">
-        <table class="student-list table">
-            <thead>
-            <tr>
-                <th>Student Name</th>
-                <th>Student Course</th>
-                <th>Student Grade</th>
-                <th>Operations</th>
-            </tr>
-            </thead>
-            <tbody>
-              
-            </tbody>
-        </table>
-    </div>
-</div>
+        <div class="student-list-container col-lg-10 col-12">
+            <table class="student-list table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Student Course</th>
+                        <th>Student Grade</th>
+                        <th id="toolsTH">Tools</th>
+                    </tr>
+                </thead>
+                <tbody class="studentTBody">
+                </tbody>
+            </table>
+        </div>
 
-<div id="errorModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Error</h4>
-        </div>
-        <div class="modal-body">
-          <p class='modalError'></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-  
-    </div>
-</div>
+        <div class="pagAndGoTo row">
+            <nav aria-label="Student list">
+                <ul class="pagination">
+                    <li class="page-item page-item-one">
+                        <a class="page-link firstPage">First</a>
+                    </li>
+                    <li class="page-item page-item-two active">
+                        <a class="page-link navPage navPageOne">1</a>
+                    </li>
+                    <li class="page-item page-item-three">
+                        <a class="page-link navPage navPageTwo">2</a>
+                    </li>
+                    <li class="page-item page-item-four">
+                        <a class="page-link navPage navPageThree">3</a>
+                    </li>
+                    <li class="page-item page-item-five">
+                        <a class="page-link navPage navPageFour">4</a>
+                    </li>
+                    <li class="page-item page-item-six">
+                        <a class="page-link navPage navPageFive">5</a>
+                    </li>
+                    <li class="page-item page-item-seven">
+                        <a class="page-link lastPage">Last</a>
+                    </li>
+                </ul>
+            </nav>
 
-<div id="updateModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Update Student</h4>
-        </div>
-        <div class="modal-body">
-          <p class='modalUpdate'></p>
-          <div class="student-add-form form-group">
-            <div class="input-group form-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-user"></span>
-                </span>
-                <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name">
+            <div class="input-group col-lg-3 col-9 mb-3">
+                <input type="number" class="form-control goToPage" placeholder="Go To Page" aria-label="gotopage" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary goToPageBtn" type="button" id="button-addon2">Enter</button>
+                </div>
+                <div class="invalid-feedback">
+                    Please input a valid page number.
+                </div>
             </div>
-            <div class="input-group form-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-list-alt"></span>
-                </span>
-                <input type="text" class="form-control" name="course" id="course"
-                       placeholder="Student Course">
-            </div>
-            <div class="input-group form-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-education"></span>
-                </span>
-                <input type="text" class="form-control" name="studentGrade" id="studentGrade"
-                       placeholder="Student Grade">
-            </div>
-            <button type="button" class="btn btn-success btnAdd" onclick="">Update</button>
         </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-  
     </div>
-</div>
+
+    <div class="alert alert-success fade show fixed-top" role="alert">
+        <p class="alertMsg"></p>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="errorModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class='modalErrorMessage'></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="updateModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title update-modal-title">Update Student</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class='modalUpdate'></p>
+                    <div class="student-add-form form-group">
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <i class="fas fa-user-graduate"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" name="studentName" id="updateStudentName" placeholder="Student Name">
+                            <div class="invalid-feedback">
+                                Please input a valid name.
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <i class="fas fa-book"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" name="course" id="updateCourse" placeholder="Student Course">
+                            <div class="invalid-feedback">
+                                Please input a valid course.
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <i class="fas fa-pencil-ruler"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" name="studentGrade" id="updateStudentGrade" placeholder="Student Grade">
+                            <div class="invalid-feedback">
+                                Please input a valid grade.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success btnUpdateToServer">Save changes</button>
+                        <button type="button" class="btn btn-danger btnCancelUpdate" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="confirmDeleteMobileModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Deletion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class='confirmDeleteMobileMessage'></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger mobileConfirmDelete" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-secondary mobileCancelDelete" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
-</html>
 
+</html>
