@@ -452,7 +452,6 @@ function clearStudentList() {
 };
 
 function getFromServer(sqlOffsetNum, sqlLimitNum) {
-    $('.mobileSearchBar, .searchBar').removeClass('is-invalid is-valid');
     var sendData = { action: 'readAll', sqlOffset: sqlOffsetNum, sqlLimit: sqlLimitNum };
     var ajaxConfig = {
         data: sendData,
@@ -672,6 +671,7 @@ function displaySearchResults(list) {
 };
 
 function displayNoResults() {
+    clearStudentList();
     $('.mobileSearchBar, .searchBar').addClass('is-invalid');
     $('.mobileSearchFailMsg, .searchFailMsg').text('Zero results found.');
 };
