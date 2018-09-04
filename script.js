@@ -52,11 +52,6 @@ function addKeyDownToForms() {
             addStudent();
         };
     });
-    $('#studentName, #course, #studentGrade').keypress(function(key) {
-        if (key.which === 13) {
-            addStudent();
-        };
-    });
     $('#updateStudentName, #updateCourse, #updateStudentGrade').keypress(function(key) {
         if (key.which === 13) {
             updateStudentServer();
