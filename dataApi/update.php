@@ -13,9 +13,9 @@ if(empty($_POST['grade'])) {
 };
 
 $id = $_POST['id'];
-$name = filter_var($_POST['name'], FILTER_SANITIZE_EMAIL);
+$name = filter_var($_POST['name']);
 $grade = $_POST['grade'];
-$course_name = filter_var($_POST['course_name'], FILTER_SANITIZE_EMAIL);
+$course_name = filter_var($_POST['course_name']);
 
 $result = null;
 $query = "UPDATE `student_data` SET `name` = '$name', `grade` = '$grade', `course_name` = '$course_name' WHERE `student_data`.`id` = $id";
