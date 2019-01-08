@@ -5,7 +5,7 @@ $searchArray = $_POST['search'];
 $queryString = "SELECT * FROM `student_data` WHERE";
 
 for ($i=0; $i < count($searchArray); ++$i) {
-    $searchItem = filter_var($searchArray[$i], FILTER_SANITIZE_EMAIL);
+    $searchItem = htmlspecialchars($_POST['course_name']);
     $queryString .= " `name` LIKE '%$searchItem%' OR `course_name` LIKE '%$searchItem%'";
     if ($i !== count($searchArray)-1) {
         $queryString .= " OR";

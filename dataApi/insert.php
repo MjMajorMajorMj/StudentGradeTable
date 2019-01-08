@@ -11,9 +11,9 @@ if(empty($_POST['grade'])) {
 
 $result = null;
 
-$name = filter_var($_POST['name'], FILTER_SANITIZE_EMAIL);
+$name = htmlspecialchars($_POST['name']);
 $grade = $_POST['grade'];
-$course_name = filter_var($_POST['course_name'], FILTER_SANITIZE_EMAIL);
+$course_name = htmlspecialchars($_POST['course_name']);
 
 $query = "INSERT INTO `student_data` (`name`, `grade`, `course_name`) VALUES ('$name', '$grade', '$course_name')";
 
